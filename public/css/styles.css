@@ -1,0 +1,245 @@
+/**
+ * Unit-Testing einer Zend Framework 2 Anwendung
+ *
+ * Zend Framework Session auf der International PHP Conference 2013 in München
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Ralf Eggert <r.eggert@travello.de>
+ * @link       http://www.ralfeggert.de/
+ */
+
+/**
+ * basic
+ */
+body {
+    font-family: 'Open Sans', ​Arial,​ sans-serif;
+    font-size: 14px;
+    border-top: 10px solid #0d7146;
+}
+
+h1 {
+    color: #0d7146;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #0d7146;
+}
+
+.hero-unit h1 {
+    font-size: 42px;
+}
+
+.hero-unit code {
+    font-size: 20px;
+}
+
+
+h3 {
+    font-weight: bold;
+}
+
+h4 {
+    color: #333333;
+}
+
+a {
+    color: #0d7146;
+}
+
+a:hover {
+    color: #04492c;
+}
+
+/**
+ * header
+ */
+header .top_line {
+    height: 10px;
+}
+
+header .logo {
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+header .logo a {
+    text-decoration: none;
+}
+
+header .logo-right {
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+header .logo-text {
+    text-align: center;
+}
+
+header .logo-text a {
+    color: #0d7146;
+}
+
+header .logo-text h2 {
+    margin-bottom: 0px;
+    font-weight: normal;
+}
+
+/**
+ * footer
+ */
+footer {
+    background-color: #04492c;
+    color: #ffffff;
+    font-size: 12px;
+    margin-top: 17px;
+    padding-bottom: 40px;
+}
+
+footer .footer-top {
+    background-color: #0d7146;
+    height: 10px;
+    margin-bottom: 17px;
+}
+
+footer .container {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+footer h4 {
+    color: #ffffff;
+    border-bottom: 1px solid #ffffff;
+    padding-bottom: 10px;
+    margin-bottom: 2px;
+}
+
+footer ul {
+    margin: 0;
+    list-style: none;
+}
+
+footer ul li {
+    border-bottom: 1px solid #898989;
+    line-height: 28px;
+}
+
+footer a {
+    color: #ffffff;
+}
+
+footer a:hover {
+    color: #ffffff;
+}
+
+/**
+ * forms
+ */
+form label {
+    color: #0d7146;
+    font-size: 14px;
+}
+
+.form-vertical .control-label {
+    font-weight: bold;
+}
+
+.form-vertical .controls .control-label {
+    font-weight: normal;
+}
+.form-vertical .controls .control-label input {
+    margin-top: 0px;
+    margin-right: 8px;
+}
+
+/**
+ * buttons
+ */
+.btn-success {
+    background-color: #0d7146;
+    background-image: -moz-linear-gradient(top, #0c6840, #207c55);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0c6840), to(#207c55) );
+    background-image: -webkit-linear-gradient(top, #0c6840, #207c55);
+    background-image: -o-linear-gradient(top, #0c6840, #207c55);
+    background-image: linear-gradient(to bottom, #0c6840, #207c55);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0c6840', endColorstr='#ff207c55', GradientType=0 );
+}
+
+.btn-success:hover, .btn-success:active, .btn-success.active,
+.btn-success.disabled, .btn-success[disabled] {
+    color: #ffffff;
+    background-color: #207c55;
+}
+
+/**
+ * general
+ */
+.pull-center {
+    text-align: center;
+    margin: auto;
+}
+
+/**
+ * Default device
+ */
+@media ( min-width : 980px) {
+    header .logo-text h2 {
+        font-size: 32px;
+        line-height: 85px;
+        margin: 20px 0 20px 0px;
+    }
+    h1 {
+        font-size: 26px;
+    }
+    h2 {
+        font-size: 22px;
+    }
+}
+
+/**
+ * Portrait tablet to landscape and desktop
+ */
+@media ( min-width : 768px) and (max-width: 979px) {
+    header .logo-text h2 {
+        font-size: 26px;
+        line-height: 85px;
+        margin: 20px 0 20px 0px;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+}
+
+/**
+ * Landscape phone to portrait tablet
+ */
+@media ( max-width : 767px) {
+    header .logo {
+        margin-left: 0px;
+    }
+    header .logo-text {
+        display: none;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+}
+
+/**
+ * Landscape phones and down
+ */
+@media ( max-width : 480px) {
+    h1 {
+        font-size: 16px;
+    }
+    h2 {
+        font-size: 14px;
+    }
+}
+

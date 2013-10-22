@@ -1,0 +1,52 @@
+<?php
+/**
+ * Unit-Testing einer Zend Framework 2 Anwendung
+ *
+ * Zend Framework Session auf der International PHP Conference 2013 in München
+ *
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Ralf Eggert <r.eggert@travello.de>
+ * @link       http://www.ralfeggert.de/
+ */
+
+/**
+ * Layout view script
+ *
+ * @package    Application
+ */
+
+// set header
+$this->headTitle('Unit-Testing einer Zend Framework 2 Anwendung')->setSeparator(' - ')->setAutoEscape(false);
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
+$this->headLink(array('rel' => 'shortcut icon', 'href' => $this->basePath() . '/img/favicon.ico'));
+$this->headLink()->appendStylesheet('http://fonts.googleapis.com/css?family=Open+Sans');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/bootstrap.min.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/font-awesome.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/font-awesome-ie7.css');
+$this->headLink()->appendStylesheet($this->basePath() . '/css/styles.css');
+$this->inlineScript()->prependFile('/js/bootstrap.min.js', 'text/javascript');
+$this->inlineScript()->prependFile('/js/jquery.min.js', 'text/javascript');
+
+?>
+<?php echo $this->doctype(); ?>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle(); ?>
+    <?php echo $this->headMeta(); ?>
+    <?php echo $this->headLink(); ?>
+    <?php echo $this->headScript(); ?>
+    <?php echo $this->headStyle(); ?>
+</head>
+<body>
+<?php echo $this->header; ?>
+<div class="container">
+    <?php echo $this->pageTitle(); ?>
+    <?php echo $this->showMessages(); ?>
+    <?php echo $this->content; ?>
+</div>
+<?php echo $this->footer; ?>
+<?php echo $this->inlineScript() ?>
+</body>
+</html>
