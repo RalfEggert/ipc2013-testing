@@ -41,15 +41,6 @@ class Bootstrap
     protected static $serviceManager;
 
     /**
-     * Change to root path
-     */
-    public static function chroot()
-    {
-        $rootPath = dirname(static::findParentPath('module'));
-        chdir($rootPath);
-    }
-
-    /**
      * Get the service manager
      */
     public static function getServiceManager()
@@ -58,29 +49,24 @@ class Bootstrap
     }
 
     /**
+     * Change to root path
+     */
+    public static function chroot()
+    {
+        $rootPath = dirname(APPLICATION_ROOT . 'module');
+        chdir($rootPath);
+    }
+
+    /**
      * Initialize the Bootstrapping
      */
     public static function init()
     {
-        $zf2ModulePaths = array(dirname(dirname(__DIR__)));
-        if (($path = static::findParentPath('vendor'))) {
-            $zf2ModulePaths[] = $path;
-        }
-        if (($path = static::findParentPath('module')) !== $zf2ModulePaths[0]) {
-            $zf2ModulePaths[] = $path;
-        }
+        define('APPLICATION_ROOT', realpath(__DIR__ . '/../../..'));
 
         static::initAutoloader();
 
-        // use ModuleManager to load this module and it's dependencies
-        $config = array(
-            'module_listener_options' => array(
-                'module_paths' => $zf2ModulePaths,
-            ),
-            'modules'                 => array(
-                'Customer'
-            )
-        );
+        $config = include APPLICATION_ROOT . '/config/tests.config.php';
 
         $serviceManager = new ServiceManager(new ServiceManagerConfig());
         $serviceManager->setService('ApplicationConfig', $config);
@@ -89,38 +75,14 @@ class Bootstrap
     }
 
     /**
-     * Find the parent path
-     */
-    protected static function findParentPath($path)
-    {
-        $dir = __DIR__;
-        $previousDir = '.';
-        while (!is_dir($dir . '/' . $path)) {
-            $dir = dirname($dir);
-            if ($previousDir === $dir) {
-                return false;
-            }
-            $previousDir = $dir;
-        }
-        return $dir . '/' . $path;
-    }
-
-    /**
      * Initialize autoloader
      */
     protected static function initAutoloader()
     {
-        $vendorPath = static::findParentPath('vendor');
+        $vendorPath = APPLICATION_ROOT . '/vendor';
 
-        $zf2Path = getenv('ZF2_PATH');
-        if (!$zf2Path) {
-            if (defined('ZF2_PATH')) {
-                $zf2Path = ZF2_PATH;
-            } elseif (is_dir($vendorPath . '/ZF2/library')) {
-                $zf2Path = $vendorPath . '/ZF2/library';
-            } elseif (is_dir($vendorPath . '/zendframework/zendframework/library')) {
-                $zf2Path = $vendorPath . '/zendframework/zendframework/library';
-            }
+        if (is_dir($vendorPath . '/zendframework/zendframework/library')) {
+            $zf2Path = $vendorPath . '/zendframework/zendframework/library';
         }
 
         if (!$zf2Path) {

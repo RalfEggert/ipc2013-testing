@@ -24,9 +24,10 @@ use PHPUnit_Framework_TestCase;
  *
  * @package    CustomerTest
  */
-class ModuleTest extends PHPUnit_Framework_TestCase {
-
-    public function testModuleFileExists() {
+class ModuleTest extends PHPUnit_Framework_TestCase
+{
+    public function testModuleFileExists()
+    {
         $this->assertTrue(class_exists('Customer\Module'));
     }
 }
