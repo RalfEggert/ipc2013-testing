@@ -27,7 +27,7 @@ error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
 
 /**
- * Boostrap
+ * Bootstrap
  *
  * Handles the bootstrapping for the unit tests of the Customer module
  *
