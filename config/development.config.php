@@ -18,6 +18,7 @@
 return array(
     'modules'                 => array(
         'Application',
+        'Customer',
         'ZendDeveloperTools',
     ),
     'module_listener_options' => array(
