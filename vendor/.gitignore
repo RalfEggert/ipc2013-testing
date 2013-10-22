@@ -5,3 +5,5 @@ composer
 zendframework
 bjyoungblood
 autoload.php
+phpunit
+symfony
