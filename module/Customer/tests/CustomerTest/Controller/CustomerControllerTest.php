@@ -45,7 +45,7 @@ class CustomerControllerTest extends AbstractHttpControllerTestCase
         $this->assertResponseStatusCode(200);
 
         $this->assertModuleName('Customer');
-        $this->assertControllerName('customer-index');
+        $this->assertControllerName('customer');
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('customer');
     }

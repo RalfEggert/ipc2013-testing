@@ -23,7 +23,7 @@ return array(
                 'options' => array(
                     'route'    => '/customer',
                     'defaults' => array(
-                        'controller' => 'customer-index',
+                        'controller' => 'customer',
                         'action'     => 'index',
                     ),
                 ),
