@@ -24,4 +24,25 @@ namespace Customer\Entity;
  */
 class CustomerEntity
 {
+    protected $id;
+
+    /**
+     * Set Id
+     *
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get Id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
