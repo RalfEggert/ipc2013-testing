@@ -74,4 +74,47 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($objectPrototype instanceof CustomerEntity);
     }
+
+    public function testFetchListResult()
+    {
+        $data = array(
+            array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            )
+        );
+
+        $resultSetPrototype = new HydratingResultSet(
+            new CustomerHydrator(),
+            new CustomerEntity()
+        );
+        $resultSetPrototype->initialize($data);
+
+        /**
+         * MOCKEN:#
+         *
+         * - Gemocktes Statement Objekt soll beim Execute die Array Daten zurückgeben
+         * - Gemocktes Statement Object an den gemockte DbDriver hängen
+         */
+        $mockDbDriver  = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
+        $this->fail('MOCKING AUFSETZEN');
+
+        $customerTable = new CustomerTable($mockDbAdapter);
+
+        $resultSetPrototype = $customerTable->getResultSetPrototype();
+
+        $this->assertTrue($resultSetPrototype instanceof HydratingResultSet);
+        $this->assertTrue($resultSetPrototype->getHydrator() instanceof CustomerHydrator);
+
+        $objectPrototype = PHPUnit_Framework_Assert::readAttribute($resultSetPrototype, 'objectPrototype');
+
+        $this->assertTrue($objectPrototype instanceof CustomerEntity);
+    }
 }
