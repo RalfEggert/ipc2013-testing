@@ -16,14 +16,14 @@
  * @package    Customer
  */
 return array(
-    'router'          => array(
+    'router'       => array(
         'routes' => array(
-            'home'    => array(
+            'customer' => array(
                 'type'    => 'Literal',
                 'options' => array(
                     'route'    => '/customer',
                     'defaults' => array(
-                        'controller' => 'customer-index',
+                        'controller' => 'customer',
                         'action'     => 'index',
                     ),
                 ),
@@ -31,9 +31,15 @@ return array(
         ),
     ),
 
-    'controllers'     => array(
+    'controllers'  => array(
         'invokables' => array(
-            'customer-index' => 'Customer\Controller\IndexController',
+            'customer' => 'Customer\Controller\IndexController',
+        ),
+    ),
+
+    'view_manager' => array(
+        'template_path_stack' => array(
+            __DIR__ . '/../view',
         ),
     ),
 );

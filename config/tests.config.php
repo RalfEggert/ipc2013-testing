@@ -17,6 +17,7 @@
  */
 return array(
     'modules'                 => array(
+        'Application',
         'Customer',
     ),
     'module_listener_options' => array(
