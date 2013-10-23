@@ -36,6 +36,6 @@ class CustomerTable extends TableGateway
      */
     public function __construct(AdapterInterface $adapter)
     {
-        parent::__construct('customers', $adapter);
+        parent::__construct('...', $adapter);
     }
 }
