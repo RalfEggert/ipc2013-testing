@@ -45,6 +45,7 @@ class CustomerEntity
     /**
      * Get Id
      *
+     *
      * @return integer
      */
     public function getId()
