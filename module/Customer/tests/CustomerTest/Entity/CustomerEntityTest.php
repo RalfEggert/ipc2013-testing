@@ -109,6 +109,4 @@ class CustomerEntityTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($value, $customerEntity->getCountry());
     }
-
-
 }
