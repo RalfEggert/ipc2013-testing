@@ -44,7 +44,71 @@ class CustomerEntityTest extends PHPUnit_Framework_TestCase
         $customerEntity = new \Customer\Entity\CustomerEntity();
         $customerEntity->setId($value);
 
-        $this->assertEquals($value, $customerEntity->getId());
+        $this->assertSame($value, $customerEntity->getId());
     }
+
+    public function testFirstnameProperty()
+    {
+        $value = 'Manfred';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setFirstname($value);
+
+        $this->assertSame($value, $customerEntity->getFirstname());
+    }
+
+    public function testLastnameProperty()
+    {
+        $value = 'Mustermann';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setLastname($value);
+
+        $this->assertSame($value, $customerEntity->getLastname());
+    }
+
+    public function testStreetProperty()
+    {
+        $value = 'Am Testen 123';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setStreet($value);
+
+        $this->assertSame($value, $customerEntity->getStreet());
+    }
+
+
+    public function testPostcodeProperty()
+    {
+        $value = '54321';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setPostcode($value);
+
+        $this->assertSame($value, $customerEntity->getPostcode());
+    }
+
+
+    public function testCityProperty()
+    {
+        $value = 'Musterhausen';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setCity($value);
+
+        $this->assertSame($value, $customerEntity->getCity());
+    }
+
+
+    public function testCountryProperty()
+    {
+        $value = 'de';
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setCountry($value);
+
+        $this->assertSame($value, $customerEntity->getCountry());
+    }
+
 
 }
