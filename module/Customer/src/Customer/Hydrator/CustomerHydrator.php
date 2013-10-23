@@ -14,7 +14,7 @@
  * namespace definition and usage
  */
 namespace Customer\Hydrator;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * Customer entity
@@ -23,6 +23,26 @@ use Zend\Stdlib\Hydrator\ClassMethods;
  *
  * @package    Customer
  */
-class CustomerHydrator extends ClassMethods
+class CustomerHydrator implements HydratorInterface
 {
+    /**
+     * Extract values from an object
+     *
+     * @param  object $object
+     * @return array
+     */
+    public function extract($object)
+    {
+    }
+
+    /**
+     * Hydrate $object with the provided $data.
+     *
+     * @param  array $data
+     * @param  object $object
+     * @return object
+     */
+    public function hydrate(array $data, $object)
+    {
+    }
 }
