@@ -17,6 +17,8 @@ namespace CustomerTest\Table;
 
 use Customer\Entity\CustomerEntity;
 use Customer\Hydrator\CustomerHydrator;
+use Customer\Table\CustomerTable;
+use PHPUnit_Framework_Assert;
 use PHPUnit_Framework_TestCase;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
@@ -51,7 +53,7 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
         $mockDbDriver  = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
         $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
 
-        $customerTable = new \Customer\Table\CustomerTable($mockDbAdapter);
+        $customerTable = new CustomerTable($mockDbAdapter);
 
         $this->assertEquals('customers', $customerTable->getTable());
     }
@@ -61,12 +63,15 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
         $mockDbDriver  = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
         $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
 
-        $customerTable = new \Customer\Table\CustomerTable($mockDbAdapter);
+        $customerTable = new CustomerTable($mockDbAdapter);
 
         $resultSetPrototype = $customerTable->getResultSetPrototype();
 
         $this->assertTrue($resultSetPrototype instanceof HydratingResultSet);
-        $this->assertTrue($resultSetPrototype->getArrayObjectPrototype() instanceof CustomerEntity);
         $this->assertTrue($resultSetPrototype->getHydrator() instanceof CustomerHydrator);
+
+        $objectPrototype = PHPUnit_Framework_Assert::readAttribute($resultSetPrototype, 'objectPrototype');
+
+        $this->assertTrue($objectPrototype instanceof CustomerEntity);
     }
 }
