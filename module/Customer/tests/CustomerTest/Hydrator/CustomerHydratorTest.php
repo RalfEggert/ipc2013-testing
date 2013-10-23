@@ -16,7 +16,7 @@
 namespace CustomerTest\Hydrator;
 
 use PHPUnit_Framework_TestCase;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * ModuleTest
@@ -36,6 +36,6 @@ class CustomerHydratorTest extends PHPUnit_Framework_TestCase
         $customerHydrator = new $className();
 
         $this->assertInstanceOf($className, $customerHydrator);
-        $this->assertTrue($customerHydrator instanceof ClassMethods);
+        $this->assertTrue($customerHydrator instanceof HydratorInterface);
     }
 }
