@@ -16,7 +16,7 @@
 namespace CustomerTest\Hydrator;
 
 use PHPUnit_Framework_TestCase;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
  * ModuleTest
@@ -36,6 +36,60 @@ class CustomerHydratorTest extends PHPUnit_Framework_TestCase
         $customerHydrator = new $className();
 
         $this->assertInstanceOf($className, $customerHydrator);
-        $this->assertTrue($customerHydrator instanceof ClassMethods);
+        $this->assertTrue($customerHydrator instanceof HydratorInterface);
+    }
+
+    public function testHydrateMethod()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+
+        $customerHydrator = new \Customer\Hydrator\CustomerHydrator();
+        $customerHydrator->hydrate($data, $customerEntity);
+
+        $this->assertSame($data['id'], $customerEntity->getId());
+        $this->assertSame($data['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data['street'], $customerEntity->getStreet());
+        $this->assertSame($data['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data['city'], $customerEntity->getCity());
+        $this->assertSame($data['country'], $customerEntity->getCountry());
+    }
+
+    public function testExtractMethod()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setId($data['id']);
+        $customerEntity->setFirstname($data['firstname']);
+        $customerEntity->setLastname($data['lastname']);
+        $customerEntity->setStreet($data['street']);
+        $customerEntity->setPostcode($data['postcode']);
+        $customerEntity->setCity($data['city']);
+        $customerEntity->setCountry($data['country']);
+
+        $customerHydrator = new \Customer\Hydrator\CustomerHydrator();
+
+        $extractedData = $customerHydrator->extract($customerEntity);
+
+        $this->assertSame($data, $extractedData);
     }
 }
