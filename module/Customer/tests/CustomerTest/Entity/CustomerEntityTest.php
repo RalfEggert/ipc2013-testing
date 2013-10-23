@@ -26,8 +26,14 @@ use PHPUnit_Framework_TestCase;
  */
 class CustomerEntityTest extends PHPUnit_Framework_TestCase
 {
-    public function testEntityFileExists()
+    public function testEntityFileExistsAndIsInstantiable()
     {
-        $this->assertTrue(class_exists('Customer\Entity\CustomerEntity'));
+        $className = 'Customer\Entity\CustomerEntity';
+
+        $this->assertTrue(class_exists($className));
+
+        $customerEntity = new $className();
+
+        $this->assertInstanceOf($className, $customerEntity);
     }
 }
