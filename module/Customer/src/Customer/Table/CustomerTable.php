@@ -15,7 +15,10 @@
  */
 namespace Customer\Table;
 
+use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
 /**
@@ -36,6 +39,11 @@ class CustomerTable extends TableGateway
      */
     public function __construct(AdapterInterface $adapter)
     {
-        parent::__construct('...', $adapter);
+        $resultSetPrototype = new HydratingResultSet(
+            new CustomerHydrator(),
+            new CustomerEntity()
+        );
+
+        parent::__construct('customers', $adapter, null, $resultSetPrototype);
     }
 }
