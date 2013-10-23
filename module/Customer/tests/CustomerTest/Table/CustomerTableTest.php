@@ -30,11 +30,14 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 {
     public function testTableFileExistsAndIsInstantiable()
     {
+        $mockDbDriver  = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
         $className = 'Customer\Table\CustomerTable';
 
         $this->assertTrue(class_exists($className));
 
-        $customerTable = new $className();
+        $customerTable = new $className($mockDbAdapter);
 
         $this->assertInstanceOf($className, $customerTable);
         $this->assertTrue($customerTable instanceof TableGateway);
