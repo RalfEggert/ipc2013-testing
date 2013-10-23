@@ -36,4 +36,15 @@ class CustomerEntityTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf($className, $customerEntity);
     }
+
+    public function testIdProperty()
+    {
+        $value = 42;
+
+        $customerEntity = new \Customer\Entity\CustomerEntity();
+        $customerEntity->setId($value);
+
+        $this->assertEquals($value, $customerEntity->getId());
+    }
+
 }
