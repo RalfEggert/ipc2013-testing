@@ -107,10 +107,8 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
         $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
 
         $customerTable = new CustomerTable($mockDbAdapter);
+        $customerList  = $customerTable->fetchList();
 
-        $customerList = $customerTable->fetchList();
-
-        \Zend\Debug\Debug::dump($customerList);
-
+        $this->assertEquals($data, $customerList->toArray());
     }
 }

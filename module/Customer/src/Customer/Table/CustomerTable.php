@@ -46,4 +46,16 @@ class CustomerTable extends TableGateway
 
         parent::__construct('customers', $adapter, null, $resultSetPrototype);
     }
+
+    /**
+     * Fetch customer list
+     *
+     * @return HydratingResultSet
+     */
+    public function fetchList()
+    {
+        $select = $this->getSql()->select();
+
+        return $this->selectWith($select);
+    }
 }
