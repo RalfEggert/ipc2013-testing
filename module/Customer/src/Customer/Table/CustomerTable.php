@@ -82,7 +82,7 @@ class CustomerTable extends TableGateway
      * Insert new customer
      *
      * @param CustomerEntity $customerEntity
-     * @return CustomerEntity
+     * @return integer
      */
     public function insertCustomer(CustomerEntity $customerEntity)
     {
@@ -91,5 +91,31 @@ class CustomerTable extends TableGateway
         $insertData = $hydrator->extract($customerEntity);
 
         return $this->insert($insertData);
+    }
+
+    /**
+     * Update existing customer
+     *
+     * @param CustomerEntity $customerEntity
+     * @return integer
+     */
+    public function updateCustomer(CustomerEntity $customerEntity)
+    {
+        $hydrator = new CustomerHydrator();
+
+        $updateData = $hydrator->extract($customerEntity);
+
+        return $this->update($updateData, array('id' => $customerEntity->getId()));
+    }
+
+    /**
+     * Delete existing customer
+     *
+     * @param CustomerEntity $customerEntity
+     * @return integer
+     */
+    public function deleteCustomer(CustomerEntity $customerEntity)
+    {
+        return $this->delete(array('id' => $customerEntity->getId()));
     }
 }
