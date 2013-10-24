@@ -58,4 +58,18 @@ class CustomerTable extends TableGateway
 
         return $this->selectWith($select);
     }
+
+    /**
+     * Fetch single customer by id
+     *
+     * @param integer $id id of customer
+     * @return CustomerEntity
+     */
+    public function fetchSingleById($id)
+    {
+        $select = $this->getSql()->select();
+        $select->where->equalTo('id', $id);
+
+        return $this->selectWith($select)->current();
+    }
 }

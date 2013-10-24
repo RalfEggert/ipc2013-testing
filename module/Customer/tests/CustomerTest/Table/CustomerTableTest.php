@@ -115,13 +115,15 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
     public function testFetchSingleByIdResult()
     {
         $data = array(
-            'id'        => 42,
-            'firstname' => 'Manfred',
-            'lastname'  => 'Mustermann',
-            'street'    => 'Am Testen 123',
-            'postcode'  => '54321',
-            'city'      => 'Musterhausen',
-            'country'   => 'de',
+            array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            )
         );
 
         $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
@@ -137,12 +139,12 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Customer\Entity\CustomerEntity', $customerEntity);
 
-        $this->assertSame($data['id'], $customerEntity->getId());
-        $this->assertSame($data['firstname'], $customerEntity->getFirstname());
-        $this->assertSame($data['lastname'], $customerEntity->getLastname());
-        $this->assertSame($data['street'], $customerEntity->getStreet());
-        $this->assertSame($data['postcode'], $customerEntity->getPostcode());
-        $this->assertSame($data['city'], $customerEntity->getCity());
-        $this->assertSame($data['country'], $customerEntity->getCountry());
+        $this->assertSame($data[0]['id'], $customerEntity->getId());
+        $this->assertSame($data[0]['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data[0]['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data[0]['street'], $customerEntity->getStreet());
+        $this->assertSame($data[0]['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data[0]['city'], $customerEntity->getCity());
+        $this->assertSame($data[0]['country'], $customerEntity->getCountry());
     }
 }
