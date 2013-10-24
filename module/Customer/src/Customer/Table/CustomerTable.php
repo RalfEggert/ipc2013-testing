@@ -77,4 +77,19 @@ class CustomerTable extends TableGateway
 
         return $this->selectWith($select)->current();
     }
+
+    /**
+     * Insert new customer
+     *
+     * @param CustomerEntity $customerEntity
+     * @return CustomerEntity
+     */
+    public function insertCustomer(CustomerEntity $customerEntity)
+    {
+        $hydrator = new CustomerHydrator();
+
+        $insertData = $hydrator->extract($customerEntity);
+
+        return $this->insert($insertData);
+    }
 }
