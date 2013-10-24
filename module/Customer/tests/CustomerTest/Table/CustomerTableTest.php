@@ -111,4 +111,32 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($data, $customerList->toArray());
     }
+
+    public function testFetchSingleByIdResult()
+    {
+        $data = array(
+            array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            ),
+        );
+
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
+
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
+        $customerTable = new CustomerTable($mockDbAdapter);
+        $customerList  = $customerTable->fetchSingleById();
+
+        $this->assertEquals($data, $customerList->toArray());
+    }
 }
