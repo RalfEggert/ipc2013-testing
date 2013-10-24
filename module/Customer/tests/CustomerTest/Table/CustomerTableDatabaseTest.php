@@ -131,7 +131,7 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         $customerEntity->setCountry('de');
 
         $customerTable = new CustomerTable($this->adapter);
-        $customerList  = $customerTable->insertCustomer($customerEntity);
+        $customerTable->insertCustomer($customerEntity);
 
         $queryTable = $this->getConnection()->createQueryTable(
             'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "99";'
@@ -143,5 +143,42 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         $customerRow = $hydrator->extract($customerEntity);
 
         $this->assertEquals($expectedRow, $customerRow);
+    }
+
+    public function testUpdateExistingCustomer()
+    {
+        $customerTable = new CustomerTable($this->adapter);
+
+        $customerEntity = $customerTable->fetchSingleById(42);
+        $customerEntity->setFirstname('Monika');
+        $customerEntity->setLastname('Musterfrau');
+
+        $customerTable->updateCustomer($customerEntity);
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "42";'
+        );
+
+        $expectedRow = $queryTable->getRow(0);
+
+        $hydrator = new CustomerHydrator();
+        $customerRow = $hydrator->extract($customerEntity);
+
+        $this->assertEquals($expectedRow, $customerRow);
+    }
+
+    public function testDeleteExistingCustomer()
+    {
+        $customerTable = new CustomerTable($this->adapter);
+
+        $customerEntity = $customerTable->fetchSingleById(42);
+
+        $customerTable->deleteCustomer($customerEntity);
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "42";'
+        );
+
+        $this->assertEquals(0, $queryTable->getRowCount());
     }
 }
