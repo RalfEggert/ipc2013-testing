@@ -86,35 +86,31 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
                 'postcode'  => '54321',
                 'city'      => 'Musterhausen',
                 'country'   => 'de',
+            ),
+            array(
+                'id'        => 43,
+                'firstname' => 'Manuela',
+                'lastname'  => 'Musterfrau',
+                'street'    => 'Am Mustern 987',
+                'postcode'  => '98765',
+                'city'      => 'Testhausen',
+                'country'   => 'de',
             )
         );
 
-        $resultSetPrototype = new HydratingResultSet(
-            new CustomerHydrator(),
-            new CustomerEntity()
-        );
-        $resultSetPrototype->initialize($data);
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
 
-        /**
-         * MOCKEN:#
-         *
-         * - Gemocktes Statement Objekt soll beim Execute die Array Daten zurückgeben
-         * - Gemocktes Statement Object an den gemockte DbDriver hängen
-         */
-        $mockDbDriver  = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
         $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
-
-        $this->fail('MOCKING AUFSETZEN');
 
         $customerTable = new CustomerTable($mockDbAdapter);
 
-        $resultSetPrototype = $customerTable->getResultSetPrototype();
+        $customerList = $customerTable->fetchList();
 
-        $this->assertTrue($resultSetPrototype instanceof HydratingResultSet);
-        $this->assertTrue($resultSetPrototype->getHydrator() instanceof CustomerHydrator);
+        \Zend\Debug\Debug::dump($customerList);
 
-        $objectPrototype = PHPUnit_Framework_Assert::readAttribute($resultSetPrototype, 'objectPrototype');
-
-        $this->assertTrue($objectPrototype instanceof CustomerEntity);
     }
 }
