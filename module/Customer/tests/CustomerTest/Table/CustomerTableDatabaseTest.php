@@ -15,6 +15,7 @@
  */
 namespace CustomerTest\Table;
 
+use Customer\Entity\CustomerEntity;
 use Customer\Table\CustomerTable;
 use PHPUnit_Extensions_Database_DataSet_QueryDataSet;
 use PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection;
@@ -116,5 +117,31 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
             $this->assertEquals($expectedRow, $customerRow);
         }
+    }
+
+    public function testInsertNewCustomer()
+    {
+        $customerEntity = new CustomerEntity();
+        $customerEntity->setId(99);
+        $customerEntity->setFirstname('Horst');
+        $customerEntity->setLastname('Hrubesch');
+        $customerEntity->setStreet('Am Köpfen 124');
+        $customerEntity->setPostcode('21451');
+        $customerEntity->setCity('Hamburg');
+        $customerEntity->setCountry('de');
+
+        $customerTable = new CustomerTable($this->adapter);
+        $customerList  = $customerTable->insertCustomer($customerEntity);
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "99";'
+        );
+
+        $expectedRow = $queryTable->getRow(0);
+
+        $hydrator = new ClassMethods();
+        $customerRow = $hydrator->extract($customerEntity);
+
+        $this->assertEquals($expectedRow, $customerRow);
     }
 }
