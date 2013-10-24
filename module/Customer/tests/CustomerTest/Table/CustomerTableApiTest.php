@@ -23,15 +23,14 @@ use PHPUnit_Framework_TestCase;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
-
 /**
- * ModuleTest
+ * CustomerTableApiTest
  *
- * Tests the Module class of the Customer Module
+ * Tests the API of the CustomerTable class
  *
  * @package    CustomerTest
  */
-class CustomerTableTest extends PHPUnit_Framework_TestCase
+class CustomerTableApiTest extends PHPUnit_Framework_TestCase
 {
     public function testTableFileExistsAndIsInstantiable()
     {
