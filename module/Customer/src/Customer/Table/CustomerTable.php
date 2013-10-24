@@ -55,6 +55,7 @@ class CustomerTable extends TableGateway
     public function fetchList()
     {
         $select = $this->getSql()->select();
+        $select->order('lastname');
 
         return $this->selectWith($select);
     }

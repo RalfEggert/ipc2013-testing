@@ -82,7 +82,7 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         $customerList  = $customerTable->fetchList();
 
         $queryTable = $this->getConnection()->createQueryTable(
-            'myComplexQuery', 'SELECT * FROM customers ORDER BY lastname;'
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers ORDER BY lastname;'
         );
 
         $this->assertEquals($queryTable->getRowCount(), $customerList->count());
