@@ -15,12 +15,12 @@
  */
 namespace CustomerTest\Table;
 
+use Customer\Hydrator\CustomerHydrator;
 use Customer\Table\CustomerTable;
 use PHPUnit_Extensions_Database_DataSet_QueryDataSet;
 use PHPUnit_Extensions_Database_DB_DefaultDatabaseConnection;
 use PHPUnit_Extensions_Database_TestCase;
 use Zend\Db\Adapter\Adapter;
-use Zend\Stdlib\Hydrator\ClassMethods;
 
 /**
  * CustomerTableDatabaseTest
@@ -87,7 +87,7 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals($queryTable->getRowCount(), $customerList->count());
 
-        $hydrator = new ClassMethods();
+        $hydrator = new CustomerHydrator();
 
         foreach ($customerList as $key => $customerEntity) {
             $expectedRow = $queryTable->getRow($key);
@@ -108,7 +108,7 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals($queryTable->getRowCount(), $customerList->count());
 
-        $hydrator = new ClassMethods();
+        $hydrator = new CustomerHydrator();
 
         foreach ($customerList as $key => $customerEntity) {
             $expectedRow = $queryTable->getRow($key);
