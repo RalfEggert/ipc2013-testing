@@ -115,15 +115,13 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
     public function testFetchSingleByIdResult()
     {
         $data = array(
-            array(
-                'id'        => 42,
-                'firstname' => 'Manfred',
-                'lastname'  => 'Mustermann',
-                'street'    => 'Am Testen 123',
-                'postcode'  => '54321',
-                'city'      => 'Musterhausen',
-                'country'   => 'de',
-            ),
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
         );
 
         $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
@@ -134,9 +132,17 @@ class CustomerTableTest extends PHPUnit_Framework_TestCase
 
         $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
 
-        $customerTable = new CustomerTable($mockDbAdapter);
-        $customerList  = $customerTable->fetchSingleById();
+        $customerTable  = new CustomerTable($mockDbAdapter);
+        $customerEntity = $customerTable->fetchSingleById(42);
 
-        $this->assertEquals($data, $customerList->toArray());
+        $this->assertInstanceOf('Customer\Entity\CustomerEntity', $customerEntity);
+
+        $this->assertSame($data['id'], $customerEntity->getId());
+        $this->assertSame($data['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data['street'], $customerEntity->getStreet());
+        $this->assertSame($data['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data['city'], $customerEntity->getCity());
+        $this->assertSame($data['country'], $customerEntity->getCountry());
     }
 }
