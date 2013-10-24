@@ -46,23 +46,38 @@ class CustomerInputFilterTest extends PHPUnit_Framework_TestCase
             'id'        => 'a',
             'firstname' => 'Manfred 0815',
             'lastname'  => '#(9(au',
-            'street'    => array('Am Testen 123'),
+            'street'    => '',
             'postcode'  => '64654564564646464654654654',
             'city'      => 'M',
             'country'   => 'it',
         );
 
         $expectedMessages = array(
-            'id'        => 'Bla',
-            'firstname' => 'Blub',
-            'lastname'  => 'Sabber',
-            'street'    => 'Troddel',
-            'postcode'  => 'Honk',
-            'city'      => 'Siff',
-            'country'   => 'Nase',
+            'id'        => array(
+                'notInt' => 'The input does not appear to be an integer',
+            ),
+            'firstname' => array(
+                'notAlpha' => 'The input contains non alphabetic characters',
+            ),
+            'lastname'  => array(
+                'notAlpha' => 'The input contains non alphabetic characters',
+            ),
+            'street'    => array(
+                'isEmpty' => 'Value is required and can\'t be empty',
+            ),
+            'postcode'  => array(
+                'postcodeNoMatch' => 'The input does not appear to be a postal code',
+            ),
+            'city'      => array(
+                'stringLengthTooShort' => 'The input is less than 3 characters long',
+            ),
+            'country'      => array(
+                'notInArray' => 'The input was not found in the haystack',
+            ),
         );
 
         $customerInputFilter = new CustomerInputFilter();
+        $customerInputFilter->init();
         $customerInputFilter->setData($rawData);
 
         $this->assertEquals(false, $customerInputFilter->isValid());
@@ -78,7 +93,7 @@ class CustomerInputFilterTest extends PHPUnit_Framework_TestCase
             'street'    => 'Am tESTEN 123',
             'postcode'  => '54321',
             'city'      => 'MusterHauSen',
-            'country'   => 'DE',
+            'country'   => 'de',
         );
 
         $expectedValues = array(
@@ -92,6 +107,7 @@ class CustomerInputFilterTest extends PHPUnit_Framework_TestCase
         );
 
         $customerInputFilter = new CustomerInputFilter();
+        $customerInputFilter->init();
         $customerInputFilter->setData($rawData);
 
         $this->assertEquals(true, $customerInputFilter->isValid());
