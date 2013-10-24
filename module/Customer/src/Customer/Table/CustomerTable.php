@@ -52,10 +52,14 @@ class CustomerTable extends TableGateway
      *
      * @return HydratingResultSet
      */
-    public function fetchList()
+    public function fetchList($country = null)
     {
         $select = $this->getSql()->select();
         $select->order('lastname');
+
+        if (!is_null($country)) {
+            $select->where->equalTo('country', $country);
+        }
 
         return $this->selectWith($select);
     }
