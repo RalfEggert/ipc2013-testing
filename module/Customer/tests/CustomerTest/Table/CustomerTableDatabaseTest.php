@@ -76,13 +76,34 @@ class CustomerTableDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         return $this->createXmlDataSet(__DIR__ . '/customer-test-data.xml');
     }
 
-    public function testFetchListOrder()
+    public function testFetchListOrderedByCountry()
     {
         $customerTable = new CustomerTable($this->adapter);
         $customerList  = $customerTable->fetchList();
 
         $queryTable = $this->getConnection()->createQueryTable(
-            'myComplexQuery', 'SELECT * FROM customers ORDER BY lastname;'
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers ORDER BY lastname;'
+        );
+
+        $this->assertEquals($queryTable->getRowCount(), $customerList->count());
+
+        $hydrator = new ClassMethods();
+
+        foreach ($customerList as $key => $customerEntity) {
+            $expectedRow = $queryTable->getRow($key);
+            $customerRow = $hydrator->extract($customerEntity);
+
+            $this->assertEquals($expectedRow, $customerRow);
+        }
+    }
+
+    public function testFetchListByCountryOrderedByCountry()
+    {
+        $customerTable = new CustomerTable($this->adapter);
+        $customerList  = $customerTable->fetchList('de');
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE country = "de" ORDER BY lastname;'
         );
 
         $this->assertEquals($queryTable->getRowCount(), $customerList->count());
