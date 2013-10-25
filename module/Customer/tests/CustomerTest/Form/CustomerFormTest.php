@@ -15,6 +15,7 @@
  */
 namespace CustomerTest\Form;
 
+use Customer\Form\CustomerForm;
 use PHPUnit_Framework_TestCase;
 use Zend\Form\FormInterface;
 
@@ -37,5 +38,14 @@ class CustomerFormTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf($className, $customerForm);
         $this->assertTrue($customerForm instanceof FormInterface);
+    }
+
+    public function testIdElementExists()
+    {
+        $customerForm = new CustomerForm();
+
+        $idElement = $customerForm->get('id');
+
+        $this->assertEquals('hidden', $idElement->getAttribute('type'));
     }
 }
