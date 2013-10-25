@@ -31,6 +31,11 @@ class CustomerForm extends Form
      */
     public function init()
     {
-
+        $this->add(
+            array(
+                'type' => 'hidden',
+                'name' => 'id',
+            )
+        );
     }
 }

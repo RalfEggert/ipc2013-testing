@@ -43,6 +43,7 @@ class CustomerFormTest extends PHPUnit_Framework_TestCase
     public function testIdElementExists()
     {
         $customerForm = new CustomerForm();
+        $customerForm->init();
 
         $idElement = $customerForm->get('id');
 
