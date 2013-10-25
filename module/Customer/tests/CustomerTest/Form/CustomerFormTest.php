@@ -126,6 +126,19 @@ class CustomerFormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('select', $countryElement->getAttribute('type'));
         $this->assertEquals('span5', $countryElement->getAttribute('class'));
         $this->assertEquals('Land', $countryElement->getLabel());
-        $this->assertEquals($valueOptions, $countryElement->getValueOptions);
+        $this->assertEquals($valueOptions, $countryElement->getValueOptions());
+    }
+
+    public function testSaveElementExists()
+    {
+        $customerForm = new CustomerForm();
+        $customerForm->init();
+
+        $countryElement = $customerForm->get('submit_save');
+
+        $this->assertEquals('submit', $countryElement->getAttribute('type'));
+        $this->assertEquals('btn btn-primary', $countryElement->getAttribute('class'));
+        $this->assertEquals('Speichern', $countryElement->getValue());
+        $this->assertEquals('submit_save', $countryElement->getAttribute('id'));
     }
 }
