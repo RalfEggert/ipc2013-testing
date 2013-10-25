@@ -37,5 +37,18 @@ class CustomerForm extends Form
                 'name' => 'id',
             )
         );
+
+        $this->add(
+            array(
+                'type'       => 'Text',
+                'name'       => 'firstname',
+                'options'    => array(
+                    'label' => 'Vorname',
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
     }
 }
