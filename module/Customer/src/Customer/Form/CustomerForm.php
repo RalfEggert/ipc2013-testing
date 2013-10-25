@@ -50,5 +50,88 @@ class CustomerForm extends Form
                 ),
             )
         );
+
+        $this->add(
+            array(
+                'type'       => 'Text',
+                'name'       => 'lastname',
+                'options'    => array(
+                    'label' => 'Nachname',
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'type'       => 'Text',
+                'name'       => 'street',
+                'options'    => array(
+                    'label' => 'Straße',
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'type'       => 'Text',
+                'name'       => 'postcode',
+                'options'    => array(
+                    'label' => 'PLZ',
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'type'       => 'Text',
+                'name'       => 'city',
+                'options'    => array(
+                    'label' => 'Stadt',
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
+
+        $this->add(
+            array(
+                'type'       => 'Select',
+                'name'       => 'country',
+                'options'    => array(
+                    'label'         => 'Land',
+                    'value_options' => array(
+                        'de' => 'Deutschland',
+                        'at' => 'Österreich',
+                        'ch' => 'Schweiz',
+                    ),
+                ),
+                'attributes' => array(
+                    'class' => 'span5',
+                ),
+            )
+        );
+
+
+        $this->add(
+            array(
+                'type'       => 'Submit',
+                'name'       => 'submit_save',
+                'attributes' => array(
+                    'value' => 'Speichern',
+                    'id'    => 'submit_save',
+                    'class' => 'btn btn-primary',
+                ),
+            )
+        );
     }
 }
