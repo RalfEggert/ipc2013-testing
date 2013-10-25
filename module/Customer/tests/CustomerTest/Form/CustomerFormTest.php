@@ -43,9 +43,22 @@ class CustomerFormTest extends PHPUnit_Framework_TestCase
     public function testIdElementExists()
     {
         $customerForm = new CustomerForm();
+        $customerForm->init();
 
         $idElement = $customerForm->get('id');
 
         $this->assertEquals('hidden', $idElement->getAttribute('type'));
+    }
+
+    public function testFirstnameElementExists()
+    {
+        $customerForm = new CustomerForm();
+        $customerForm->init();
+
+        $firstnameElement = $customerForm->get('firstname');
+
+        $this->assertEquals('text', $firstnameElement->getAttribute('type'));
+        $this->assertEquals('span5', $firstnameElement->getAttribute('class'));
+        $this->assertEquals('Vorname', $firstnameElement->getLabel());
     }
 }
