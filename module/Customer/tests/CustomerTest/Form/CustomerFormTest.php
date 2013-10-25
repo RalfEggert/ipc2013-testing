@@ -21,7 +21,7 @@ use Zend\Form\FormInterface;
 /**
  * CustomerFormTest
  *
- * Tests the input filter for the customer
+ * Tests the form for the customer
  *
  * @package    CustomerTest
  */
