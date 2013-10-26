@@ -20,13 +20,13 @@ use Customer\Hydrator\CustomerHydrator;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * CustomerControllerRoutingTest
+ * CustomerControllerMvcTest
  *
- * Tests the routing for the customer controller
+ * Tests the mvc part for the customer controller
  *
  * @package    CustomerTest
  */
-class CustomerControllerRoutingTest extends AbstractHttpControllerTestCase
+class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
 {
     /**
      * Setup test case
