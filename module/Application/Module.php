@@ -52,7 +52,7 @@ class Module implements
         $eventManager->attachAggregate(new ApplicationListener());
 
         // configure session
-        $e->getApplication()->getServiceManager()->get('Session\Config');
+//        $e->getApplication()->getServiceManager()->get('Session\Config');
 
         // add StringToUrl filter to StaticFilter
         StaticFilter::getPluginManager()->setInvokableClass(

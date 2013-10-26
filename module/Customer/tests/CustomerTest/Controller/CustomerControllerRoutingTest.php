@@ -15,6 +15,8 @@
  */
 namespace CustomerTest\Controller;
 
+use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
@@ -55,5 +57,64 @@ class CustomerControllerRoutingTest extends AbstractHttpControllerTestCase
         $this->assertControllerName('customer');
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('customer');
+    }
+
+
+    /**
+     * Test if index action view result is as expected
+     */
+    public function testIndexActionViewResultAsExpected()
+    {
+        $data = array(
+            array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            ),
+            array(
+                'id'        => 43,
+                'firstname' => 'Manuela',
+                'lastname'  => 'Musterfrau',
+                'street'    => 'Am Mustern 987',
+                'postcode'  => '98765',
+                'city'      => 'Testhausen',
+                'country'   => 'de',
+            )
+        );
+
+        $customerHydrator = new CustomerHydrator();
+
+        $expectedListData = array();
+
+        foreach ($data as $row) {
+
+            $expectedListData[$row['id']] = new CustomerEntity();
+
+            $customerHydrator->hydrate($row, $expectedListData[$row['id']]);
+        }
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchList')->will($this->returnValue($expectedListData));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer');
+
+        foreach ($expectedListData as $customerEntity) {
+            /** @var $customerEntity CustomerEntity */
+            $this->assertContains($customerEntity->getId(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getFirstname(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getLastname(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getStreet(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getPostcode(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getCity(), $this->getResponse()->getContent());
+            $this->assertContains($customerEntity->getCountry(), $this->getResponse()->getContent());
+        }
     }
 }
