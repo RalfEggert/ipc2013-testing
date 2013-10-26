@@ -43,10 +43,9 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
     {
         try {
             $customerService = new CustomerService();
-            $customerTable = $customerService->getCustomerTable();
-        }
-
-        catch (InvalidArgumentException $expected) {
+            $customerTable   = $customerService->getCustomerTable();
+        } catch (InvalidArgumentException $expected) {
+            $this->assertEquals('CustomerTable was not set', $expected->getMessage());
             return;
         }
 
@@ -55,7 +54,9 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 
     public function testTableGetterWhenTableWasSet()
     {
-        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable');
+        $mockDbDriver      = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbAdapter     = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', null, array($mockDbAdapter));
 
         $customerService = new CustomerService();
         $customerService->setCustomerTable($mockCustomerTable);
