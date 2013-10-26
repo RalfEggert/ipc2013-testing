@@ -98,11 +98,15 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $hydrator = new CustomerHydrator();
 
-        foreach ($customerList as $key => $customerEntity) {
+        $key = 0;
+
+        foreach ($customerList as $customerEntity) {
             $expectedRow = $queryTable->getRow($key);
             $customerRow = $hydrator->extract($customerEntity);
 
             $this->assertEquals($expectedRow, $customerRow);
+
+            $key++;
         }
     }
 }
