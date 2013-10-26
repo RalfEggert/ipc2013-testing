@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<dataset>
+<table name="customers">
+    <column>id</column>
+    <column>firstname</column>
+    <column>lastname</column>
+    <column>street</column>
+    <column>postcode</column>
+    <column>city</column>
+    <column>country</column>
+    <row>
+        <value>42</value>
+        <value>Manfred</value>
+        <value>Mustermann</value>
+        <value>Am Testen 123</value>
+        <value>54321</value>
+        <value>Musterhausen</value>
+        <value>de</value>
+    </row>
+    <row>
+        <value>43</value>
+        <value>Manuela</value>
+        <value>Musterfrau</value>
+        <value>Am Mustern 987</value>
+        <value>98765</value>
+        <value>Testhausen</value>
+        <value>de</value>
+    </row>
+    <row>
+        <value>49</value>
+        <value>Klaus</value>
+        <value>Störtebeker</value>
+        <value>Am Galgen 1</value>
+        <value>20095</value>
+        <value>Hamburg</value>
+        <value>de</value>
+    </row>
+    <row>
+        <value>52</value>
+        <value>Peter</value>
+        <value>Alexander</value>
+        <value>Am Singen 23</value>
+        <value>8974</value>
+        <value>Wien</value>
+        <value>at</value>
+    </row>
+    <row>
+        <value>23</value>
+        <value>Peter</value>
+        <value>Petersen</value>
+        <value>Am Schlafen 99</value>
+        <value>12345</value>
+        <value>Ratzhausen</value>
+        <value>de</value>
+    </row>
+</table>
+</dataset>
