@@ -20,6 +20,7 @@ use Customer\Hydrator\CustomerHydrator;
 use Customer\InputFilter\CustomerInputFilter;
 use Customer\Table\CustomerTable;
 use InvalidArgumentException;
+use Zend\Db\Adapter\Exception\InvalidQueryException;
 
 /**
  * Customer sercice
@@ -141,6 +142,22 @@ class CustomerService
         /** @var CustomerHydrator $hydrator */
         $hydrator = new CustomerHydrator();
         $hydrator->hydrate($data, $customerEntity);
+
+        // get save data
+        $saveData = $hydrator->extract($customerEntity);
+
+        // insert new customer
+        try {
+            $result = $this->getCustomerTable()->insert($saveData);
+
+            // get last insert value
+            $id = $this->getCustomerTable()->getLastInsertValue();
+        } catch (InvalidQueryException $e) {
+            return false;
+        }
+
+        // reload customer
+        $customerEntity = $this->fetchSingleById($id);
 
         // return entity
         return $customerEntity;
