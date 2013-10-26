@@ -218,7 +218,7 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
         $viewModel = $customerController->createAction();
 
         $customerEntity = $viewModel->getVariable('customerEntity');
-        
+
         $this->assertEquals($expectedEntity->getId(), $customerEntity->getId());
         $this->assertEquals($expectedEntity->getFirstname(), $customerEntity->getFirstname());
         $this->assertEquals($expectedEntity->getLastname(), $customerEntity->getLastname());
