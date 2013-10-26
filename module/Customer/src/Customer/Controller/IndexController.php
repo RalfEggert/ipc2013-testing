@@ -150,4 +150,18 @@ class IndexController extends AbstractActionController
             )
         );
     }
+
+    /**
+     * Handle customer update
+     */
+    public function updateAction()
+    {
+        $customerForm = $this->getCustomerForm();
+
+        return new ViewModel(
+            array(
+                'customerForm' => $customerForm,
+            )
+        );
+    }
 }
