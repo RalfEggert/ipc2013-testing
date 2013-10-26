@@ -32,8 +32,15 @@ return array(
     ),
 
     'controllers'  => array(
-        'invokables' => array(
-            'customer' => 'Customer\Controller\IndexController',
+        'factories' => array(
+            'customer' => 'Customer\Controller\IndexControllerFactory',
+        ),
+    ),
+
+    'service_manager' => array(
+        'factories' => array(
+            'Customer\Service\Customer' => 'Customer\Service\CustomerServiceFactory',
+            'Customer\Table\Customer'   => 'Customer\Table\CustomerTableFactory',
         ),
     ),
 

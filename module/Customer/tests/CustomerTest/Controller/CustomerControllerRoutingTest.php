@@ -41,6 +41,13 @@ class CustomerControllerRoutingTest extends AbstractHttpControllerTestCase
      */
     public function testIndexActionCanBeAccessed()
     {
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchList')->will($this->returnValue(array()));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
         $this->dispatch('/customer');
         $this->assertResponseStatusCode(200);
 
