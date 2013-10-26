@@ -288,4 +288,115 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
             }
         }
     }
+
+    /**
+     * Test if update action can be accessed
+     */
+    public function testUpdateActionCanBeAccessed()
+    {
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/update/42');
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('Customer');
+        $this->assertControllerName('customer');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('customer/action');
+
+        $this->assertContains('<form action="/customer/update/42"', $this->getResponse()->getContent());
+    }
+
+    /**
+     * Test if show action view result is as expected
+     */
+    public function testUpdateActionWithValidPostData()
+    {
+        $postData = array(
+            'id'        => 42,
+            'firstname' => 'Manuela',
+            'lastname'  => 'Musterfrau',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($postData, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue($expectedEntity));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/update/42', 'POST', $postData);
+
+        $this->assertResponseStatusCode(302);
+
+        $this->assertRedirectTo('/customer/update/42');
+    }
+
+    /**
+     * Test if update action works as expected with invalid data
+     */
+    public function testUpdateActionWithInvalidPostData()
+    {
+        $postData = array(
+            'firstname' => 'Manfred 0815',
+            'lastname'  => '#(9(au',
+            'street'    => '##',
+            'postcode'  => '64654564564646464654654654',
+            'city'      => 'M',
+            'country'   => 'it',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($postData, $expectedEntity);
+
+        $customerFilter = new CustomerInputFilter();
+        $customerFilter->init();
+        $customerFilter->remove('id');
+        $customerFilter->setData($postData);
+        $customerFilter->isValid();
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('getCustomerFilter')->will($this->returnValue($customerFilter));
+        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue(false));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/update/42', 'POST', $postData);
+
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('Customer');
+        $this->assertControllerName('customer');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('customer/action');
+
+        $this->assertContains('<form action="/customer/update/42"', $this->getResponse()->getContent());
+
+        foreach ($postData as $value) {
+            $this->assertContains($value, $this->getResponse()->getContent());
+        }
+
+        foreach ($customerFilter->getMessages() as $messageBlock) {
+            foreach ($messageBlock as $message) {
+                $this->assertContains($message, $this->getResponse()->getContent());
+            }
+        }
+    }
 }
