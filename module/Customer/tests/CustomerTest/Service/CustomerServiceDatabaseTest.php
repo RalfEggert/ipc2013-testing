@@ -105,7 +105,7 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         );
 
         $expectedRow = $queryTable->getRow(0);
-        
+
         $this->assertEquals($expectedRow, $customerRow);
     }
 }
