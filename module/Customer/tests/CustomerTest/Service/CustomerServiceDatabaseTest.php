@@ -106,6 +106,9 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $expectedRow = $queryTable->getRow(0);
 
+        $hydrator = new CustomerHydrator();
+        $customerRow = $hydrator->extract($customerEntity);
+
         $this->assertEquals($expectedRow, $customerRow);
     }
 }
