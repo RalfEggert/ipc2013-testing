@@ -260,7 +260,36 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteCustomer()
     {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedCustomerEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedCustomerEntity);
+
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
+
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', array('deleteCustomer', 'getAffectedRows', 'fetchSingleById'), array($mockDbAdapter));
+        $mockCustomerTable->expects($this->any())->method('deleteCustomer')->will($this->returnValue(true));
+        $mockCustomerTable->expects($this->any())->method('getAffectedRows')->will($this->returnValue(1));
+        $mockCustomerTable->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedCustomerEntity));
+
         $customerService = new CustomerService();
+        $customerService->setCustomerTable($mockCustomerTable);
 
         $result = $customerService->delete(42);
 
