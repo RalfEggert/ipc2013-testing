@@ -17,6 +17,7 @@ namespace CustomerTest\Controller;
 
 use Customer\Entity\CustomerEntity;
 use Customer\Hydrator\CustomerHydrator;
+use Customer\InputFilter\CustomerInputFilter;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
