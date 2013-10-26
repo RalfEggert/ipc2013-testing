@@ -173,15 +173,12 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
 
         $customerEntity = $viewModel->getVariable('customerEntity');
 
-        foreach ($expectedListData as $key => $customerEntity) {
-            /** @var $customerEntity CustomerEntity */
-            $this->assertEquals($expectedEntity->getId(), $customerEntity->getId());
-            $this->assertEquals($expectedEntity->getFirstname(), $customerEntity->getFirstname());
-            $this->assertEquals($expectedEntity->getLastname(), $customerEntity->getLastname());
-            $this->assertEquals($expectedEntity->getStreet(), $customerEntity->getStreet());
-            $this->assertEquals($expectedEntity->getPostcode(), $customerEntity->getPostcode());
-            $this->assertEquals($expectedEntity->getCity(), $customerEntity->getCity());
-            $this->assertEquals($expectedEntity->getCountry(), $customerEntity->getCountry());
-        }
+        $this->assertEquals($expectedEntity->getId(), $customerEntity->getId());
+        $this->assertEquals($expectedEntity->getFirstname(), $customerEntity->getFirstname());
+        $this->assertEquals($expectedEntity->getLastname(), $customerEntity->getLastname());
+        $this->assertEquals($expectedEntity->getStreet(), $customerEntity->getStreet());
+        $this->assertEquals($expectedEntity->getPostcode(), $customerEntity->getPostcode());
+        $this->assertEquals($expectedEntity->getCity(), $customerEntity->getCity());
+        $this->assertEquals($expectedEntity->getCountry(), $customerEntity->getCountry());
     }
 }

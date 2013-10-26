@@ -101,4 +101,26 @@ class IndexController extends AbstractActionController
             )
         );
     }
+
+    /**
+     * Handle customer entry
+     */
+    public function showAction()
+    {
+        $id = $this->params()->fromRoute('id');
+
+        if (!$id) {
+            return $this->redirect()->toRoute('customer');
+        }
+
+        $customerEntity = $this->getCustomerService()->fetchSingleById($id);
+
+        if (!$customerEntity) {
+            return $this->redirect()->toRoute('customer');
+        }
+
+        return new ViewModel(array(
+            'customerEntity' => $customerEntity,
+        ));
+    }
 }
