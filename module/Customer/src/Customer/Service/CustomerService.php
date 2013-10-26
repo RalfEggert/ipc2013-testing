@@ -143,12 +143,9 @@ class CustomerService
         $hydrator = new CustomerHydrator();
         $hydrator->hydrate($data, $customerEntity);
 
-        // get save data
-        $saveData = $hydrator->extract($customerEntity);
-
         // insert new customer
         try {
-            $result = $this->getCustomerTable()->insert($saveData);
+            $this->getCustomerTable()->insertCustomer($customerEntity);
 
             // get last insert value
             $id = $this->getCustomerTable()->getLastInsertValue();

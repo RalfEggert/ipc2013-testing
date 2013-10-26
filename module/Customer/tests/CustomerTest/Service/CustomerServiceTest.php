@@ -16,6 +16,7 @@
 namespace CustomerTest\Service;
 
 use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use Customer\InputFilter\CustomerInputFilter;
 use Customer\Service\CustomerService;
 use InvalidArgumentException;
@@ -195,11 +196,30 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
             'country'   => 'de',
         );
 
+        $expectedCustomerEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedCustomerEntity);
+
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
+
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', array('insertCustomer', 'getLastInsertValue', 'fetchSingleById'), array($mockDbAdapter));
+        $mockCustomerTable->expects($this->any())->method('insertCustomer')->will($this->returnValue(42));
+        $mockCustomerTable->expects($this->any())->method('getLastInsertValue')->will($this->returnValue(42));
+        $mockCustomerTable->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedCustomerEntity));
+
         $customerFilter = new CustomerInputFilter();
         $customerFilter->init();
 
         $customerService = new CustomerService();
         $customerService->setCustomerFilter($customerFilter);
+        $customerService->setCustomerTable($mockCustomerTable);
 
         $customerEntity = $customerService->save($data);
 
