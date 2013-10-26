@@ -123,4 +123,18 @@ class IndexController extends AbstractActionController
             'customerEntity' => $customerEntity,
         ));
     }
+
+    /**
+     * Handle customer create
+     */
+    public function createAction()
+    {
+        $customerForm = $this->getCustomerForm();
+
+        return new ViewModel(
+            array(
+                'customerForm' => $customerForm,
+            )
+        );
+    }
 }
