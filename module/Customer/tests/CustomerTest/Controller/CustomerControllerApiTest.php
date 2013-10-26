@@ -201,4 +201,21 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($customerForm instanceof CustomerForm);
     }
+
+    /**
+     * Test update action view model
+     */
+    public function testUpdateActionWithoutPost()
+    {
+        $mockCustomerForm = $this->getMockBuilder('Customer\Form\CustomerForm')->getMock();
+
+        $customerController = new IndexController();
+        $customerController->setCustomerForm($mockCustomerForm);
+
+        $viewModel = $customerController->updateAction();
+
+        $customerForm = $viewModel->getVariable('customerForm');
+
+        $this->assertTrue($customerForm instanceof CustomerForm);
+    }
 }
