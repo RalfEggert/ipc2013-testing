@@ -141,4 +141,29 @@ class CustomerFormTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Speichern', $countryElement->getValue());
         $this->assertEquals('submit_save', $countryElement->getAttribute('id'));
     }
+
+    public function testSetDataAndGetData()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $customerForm = new CustomerForm();
+        $customerForm->init();
+        $customerForm->setData($data);
+
+        $this->assertSame($data['id'], $customerForm->get('id')->getValue());
+        $this->assertSame($data['firstname'], $customerForm->get('firstname')->getValue());
+        $this->assertSame($data['lastname'], $customerForm->get('lastname')->getValue());
+        $this->assertSame($data['street'], $customerForm->get('street')->getValue());
+        $this->assertSame($data['postcode'], $customerForm->get('postcode')->getValue());
+        $this->assertSame($data['city'], $customerForm->get('city')->getValue());
+        $this->assertSame($data['country'], $customerForm->get('country')->getValue());
+    }
 }
