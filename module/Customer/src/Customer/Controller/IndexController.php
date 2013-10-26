@@ -129,6 +129,16 @@ class IndexController extends AbstractActionController
      */
     public function createAction()
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $customerEntity = $this->getCustomerService()->save($request->getPost()->toArray());
+
+            if ($customerEntity) {
+                return $this->redirect()->toRoute('customer/action', array('action' => 'update', 'id' => $customerEntity->getId()));
+            }
+        }
+
         $customerForm = $this->getCustomerForm();
 
         return new ViewModel(
