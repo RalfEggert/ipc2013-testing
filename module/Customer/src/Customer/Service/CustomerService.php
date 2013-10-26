@@ -175,6 +175,22 @@ class CustomerService
      */
     public function delete($id)
     {
+        // fetch customer entity
+        $customerEntity = $this->fetchSingleById($id);
+
+        // check customer
+        if (!$customerEntity) {
+            return false;
+        }
+
+        // delete existing customer
+        try {
+            $result = $this->getCustomerTable()->deleteCustomer($customerEntity);
+        } catch (InvalidQueryException $e) {
+            return false;
+        }
+
+        // return result
         return true;
     }
 }
