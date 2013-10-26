@@ -14,6 +14,8 @@
  * namespace definition and usage
  */
 
+use Customer\Entity\CustomerEntity;
+
 /**
  * Index view script
  *
@@ -21,4 +23,30 @@
  */
 
 ?>
-Index View Skript
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Anschrift</th>
+        <th>Land</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->customerList as $customerEntity) : /* @var $customerEntity CustomerEntity */ ?>
+        <tr>
+            <td><?php echo $customerEntity->getId(); ?></td>
+            <td><?php echo $customerEntity->getFirstname(); ?></td>
+            <td><?php echo $customerEntity->getLastname(); ?></td>
+            <td><?php echo $customerEntity->getStreet() . ', ' . $customerEntity->getPostcode() . ' ' . $customerEntity->getCity(); ?></td>
+            <td><?php echo $customerEntity->getCountry(); ?></td>
+            <td>&nbsp;</td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<hr />
+<a href="<?php echo $this->url('home'); ?>" class="btn btn-success">Übersicht</a>
+
