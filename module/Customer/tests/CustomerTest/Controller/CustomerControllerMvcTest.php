@@ -181,6 +181,12 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
      */
     public function testCreateActionCanBeAccessed()
     {
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
         $this->dispatch('/customer/create');
         $this->assertResponseStatusCode(200);
 

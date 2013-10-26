@@ -57,6 +57,12 @@ return array(
         ),
     ),
 
+    'form_elements' => array(
+        'invokables' => array(
+            'Customer\Form\Customer'    => 'Customer\Form\CustomerForm',
+        ),
+    ),
+
     'view_manager'    => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',

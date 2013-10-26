@@ -35,12 +35,15 @@ class IndexControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $controllerLoader)
     {
-        $serviceLocator = $controllerLoader->getServiceLocator();
+        $serviceLocator     = $controllerLoader->getServiceLocator();
+        $formElementManager = $serviceLocator->get('FormElementManager');
 
-        $service    = $serviceLocator->get('Customer\Service\Customer');
+        $service = $serviceLocator->get('Customer\Service\Customer');
+        $form    = $formElementManager->get('Customer\Form\Customer');
 
         $controller = new IndexController();
         $controller->setCustomerService($service);
+        $controller->setCustomerForm($form);
 
         return $controller;
     }
