@@ -42,7 +42,9 @@ use Customer\Entity\CustomerEntity;
             <td><?php echo $customerEntity->getLastname(); ?></td>
             <td><?php echo $customerEntity->getStreet() . ', ' . $customerEntity->getPostcode() . ' ' . $customerEntity->getCity(); ?></td>
             <td><?php echo $customerEntity->getCountry(); ?></td>
-            <td>&nbsp;</td>
+            <td>
+                <a href="<?php echo $this->url('customer/action', array('action' => 'show', 'id' => $customerEntity->getId()));?>" class="btn btn-small"><i class="icon-search"></i> anzeigen</a>
+            </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
