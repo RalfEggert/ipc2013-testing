@@ -51,6 +51,29 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($mockCustomerService, $controller->getCustomerService());
     }
 
+    public function testFormGetterWhenFormNotSet()
+    {
+        try {
+            $customerController = new IndexController();
+            $customerForm    = $customerController->getCustomerForm();
+        } catch (InvalidArgumentException $expected) {
+            $this->assertEquals('CustomerForm was not set', $expected->getMessage());
+            return;
+        }
+
+        $this->fail('An expected exception has not been raised.');
+    }
+
+    public function testFormGetterWhenFormWasSet()
+    {
+        $mockCustomerForm = $this->getMock('Customer\Form\CustomerForm');
+
+        $controller = new IndexController();
+        $controller->setCustomerForm($mockCustomerForm);
+
+        $this->assertEquals($mockCustomerForm, $controller->getCustomerForm());
+    }
+
     /**
      * Test index action view model
      */

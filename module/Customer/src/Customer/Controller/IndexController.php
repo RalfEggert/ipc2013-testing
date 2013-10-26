@@ -15,6 +15,7 @@
  */
 namespace Customer\Controller;
 
+use Customer\Form\CustomerForm;
 use Customer\Service\CustomerService;
 use InvalidArgumentException;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -33,6 +34,11 @@ class IndexController extends AbstractActionController
      * @var CustomerService
      */
     protected $customerService;
+
+    /**
+     * @var CustomerForm
+     */
+    protected $customerForm;
 
     /**
      * set the customer service
@@ -57,6 +63,31 @@ class IndexController extends AbstractActionController
             throw new InvalidArgumentException('CustomerService was not set');
         }
         return $this->customerService;
+    }
+
+    /**
+     * set the customer form
+     *
+     * @param CustomerForm
+     */
+    public function setCustomerForm(CustomerForm $customerForm)
+    {
+        $this->customerForm = $customerForm;
+
+        return $this;
+    }
+
+    /**
+     * Get the customer form
+     *
+     * @return CustomerForm
+     */
+    public function getCustomerForm()
+    {
+        if (!isset($this->customerForm)) {
+            throw new InvalidArgumentException('CustomerForm was not set');
+        }
+        return $this->customerForm;
     }
 
     /**
