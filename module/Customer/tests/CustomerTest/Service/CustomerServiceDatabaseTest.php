@@ -111,4 +111,33 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals($expectedRow, $customerRow);
     }
+
+    public function testUpdateExistingCustomer()
+    {
+        $customerFilter = new CustomerInputFilter();
+        $customerTable = new CustomerTable($this->adapter);
+        $customerHydrator = new CustomerHydrator();
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerFilter($customerFilter);
+        $customerService->setCustomerTable($customerTable);
+
+        $customerEntity = $customerService->fetchSingleById(42);
+        $customerEntity->setFirstname('Monika');
+        $customerEntity->setLastname('Musterfrau');
+
+        $data = $customerHydrator->extract($customerEntity);
+
+        $customerEntity = $customerService->save($data, $customerEntity->getId());
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "42";'
+        );
+
+        $expectedRow = $queryTable->getRow(0);
+
+        $customerRow = $customerHydrator->extract($customerEntity);
+
+        $this->assertEquals($expectedRow, $customerRow);
+    }
 }
