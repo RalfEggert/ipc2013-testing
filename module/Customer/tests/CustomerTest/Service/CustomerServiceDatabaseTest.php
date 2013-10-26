@@ -150,9 +150,7 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         $customerService->setCustomerFilter($customerFilter);
         $customerService->setCustomerTable($customerTable);
 
-        $customerEntity = $customerService->fetchSingleById(42);
-
-        $customerTable->deleteCustomer($customerEntity);
+        $customerService->delete('42');
 
         $queryTable = $this->getConnection()->createQueryTable(
             'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "42";'
