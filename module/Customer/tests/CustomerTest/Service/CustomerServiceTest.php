@@ -15,6 +15,7 @@
  */
 namespace CustomerTest\Service;
 
+use Customer\Entity\CustomerEntity;
 use Customer\InputFilter\CustomerInputFilter;
 use Customer\Service\CustomerService;
 use InvalidArgumentException;
@@ -86,5 +87,21 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
         $customerService->setCustomerFilter($customerFilter);
 
         $this->assertEquals($customerFilter, $customerService->getCustomerFilter());
+    }
+
+    public function testFetchSingleById()
+    {
+        $mockDbDriver      = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbAdapter     = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', null, array($mockDbAdapter));
+        $mockCustomerTable->expects($this->any())->method('fetchSingleById')->will($this->returnValue(new CustomerEntity()));
+        
+        $customerService = new CustomerService();
+        $customerService->setCustomerTable($mockCustomerTable);
+
+        $customerEntity = $customerService->fetchSingleById(42);
+
+        $this->assertTrue($customerEntity instanceof CustomerEntity);
+
     }
 }
