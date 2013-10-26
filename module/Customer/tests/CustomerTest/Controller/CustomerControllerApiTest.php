@@ -207,10 +207,35 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateActionWithoutPost()
     {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedEntity));
+
         $mockCustomerForm = $this->getMockBuilder('Customer\Form\CustomerForm')->getMock();
 
+        $routeMatch = new RouteMatch(array('controller' => 'customer', 'action' => 'update', 'id' => 42));
+
+        $mvcEvent = new MvcEvent();
+        $mvcEvent->setRouteMatch($routeMatch);
+
         $customerController = new IndexController();
+        $customerController->setCustomerService($mockCustomerService);
         $customerController->setCustomerForm($mockCustomerForm);
+        $customerController->setEvent($mvcEvent);
 
         $viewModel = $customerController->updateAction();
 
