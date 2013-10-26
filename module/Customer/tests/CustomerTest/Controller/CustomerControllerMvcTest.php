@@ -59,7 +59,6 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $this->assertMatchedRouteName('customer');
     }
 
-
     /**
      * Test if index action view result is as expected
      */

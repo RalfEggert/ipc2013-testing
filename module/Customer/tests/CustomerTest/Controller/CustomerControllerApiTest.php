@@ -20,6 +20,8 @@ use Customer\Entity\CustomerEntity;
 use Customer\Hydrator\CustomerHydrator;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch;
 
 /**
  * CustomerControllerViewModelTest
@@ -132,6 +134,54 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($customerEntity->getPostcode(), $customerList[$key]->getPostcode());
             $this->assertEquals($customerEntity->getCity(), $customerList[$key]->getCity());
             $this->assertEquals($customerEntity->getCountry(), $customerList[$key]->getCountry());
+        }
+    }
+
+    /**
+     * Test show action view model
+     */
+    public function testShowAction()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedEntity));
+
+        $routeMatch = new RouteMatch(array('controller' => 'customer', 'action' => 'show', 'id' => 42));
+
+        $mvcEvent = new MvcEvent();
+        $mvcEvent->setRouteMatch($routeMatch);
+
+        $customerController = new IndexController();
+        $customerController->setCustomerService($mockCustomerService);
+        $customerController->setEvent($mvcEvent);
+
+        $viewModel = $customerController->showAction();
+
+        $customerEntity = $viewModel->getVariable('customerEntity');
+
+        foreach ($expectedListData as $key => $customerEntity) {
+            /** @var $customerEntity CustomerEntity */
+            $this->assertEquals($expectedEntity->getId(), $customerEntity->getId());
+            $this->assertEquals($expectedEntity->getFirstname(), $customerEntity->getFirstname());
+            $this->assertEquals($expectedEntity->getLastname(), $customerEntity->getLastname());
+            $this->assertEquals($expectedEntity->getStreet(), $customerEntity->getStreet());
+            $this->assertEquals($expectedEntity->getPostcode(), $customerEntity->getPostcode());
+            $this->assertEquals($expectedEntity->getCity(), $customerEntity->getCity());
+            $this->assertEquals($expectedEntity->getCountry(), $customerEntity->getCountry());
         }
     }
 }
