@@ -16,22 +16,35 @@
  * @package    Customer
  */
 return array(
-    'router'       => array(
+    'router'          => array(
         'routes' => array(
             'customer' => array(
-                'type'    => 'Literal',
-                'options' => array(
+                'type'          => 'Literal',
+                'options'       => array(
                     'route'    => '/customer',
                     'defaults' => array(
                         'controller' => 'customer',
                         'action'     => 'index',
                     ),
                 ),
+                'may_terminate' => true,
+                'child_routes'  => array(
+                    'action' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'       => '/:action[/:id]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[0-9_-]*',
+                            ),
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
 
-    'controllers'  => array(
+    'controllers'     => array(
         'factories' => array(
             'customer' => 'Customer\Controller\IndexControllerFactory',
         ),
@@ -44,7 +57,7 @@ return array(
         ),
     ),
 
-    'view_manager' => array(
+    'view_manager'    => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
