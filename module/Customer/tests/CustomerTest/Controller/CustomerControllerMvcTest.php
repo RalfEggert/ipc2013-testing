@@ -415,4 +415,37 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
             }
         }
     }
+    /**
+     * Test if delete action can be accessed
+     */
+    public function testDeleteActionCanBeAccessed()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedEntity));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/delete/42');
+
+        $this->assertResponseStatusCode(302);
+
+        $this->assertRedirectTo('/customer');
+    }
 }
