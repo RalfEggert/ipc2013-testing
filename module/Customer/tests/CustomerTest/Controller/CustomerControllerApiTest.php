@@ -16,6 +16,7 @@
 namespace CustomerTest\Controller;
 
 use Customer\Controller\IndexController;
+use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
 /**
