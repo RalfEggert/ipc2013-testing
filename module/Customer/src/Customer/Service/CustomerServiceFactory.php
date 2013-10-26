@@ -35,10 +35,14 @@ class CustomerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $table   = $serviceLocator->get('Customer\Table\Customer');
+        $inputFilterManager = $serviceLocator->get('InputFilterManager');
+
+        $table  = $serviceLocator->get('Customer\Table\Customer');
+        $filter = $inputFilterManager->get('Customer\CustomerFilter');
 
         $service = new CustomerService();
         $service->setCustomerTable($table);
+        $service->setCustomerFilter($filter);
 
         return $service;
     }
