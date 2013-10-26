@@ -15,24 +15,48 @@
  */
 namespace CustomerTest\Controller;
 
+use Customer\Controller\IndexController;
 use PHPUnit_Framework_TestCase;
 
 /**
- * ModuleTest
+ * CustomerControllerViewModelTest
  *
- * Tests the Module class of the Customer Module
+ * Tests the API for the customer controller
  *
  * @package    CustomerTest
  */
-class CustomerControllerViewModelTest extends PHPUnit_Framework_TestCase
+class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
 {
+    public function testServiceGetterWhenServiceNotSet()
+    {
+        try {
+            $customerController = new IndexController();
+            $customerService    = $customerController->getCustomerService();
+        } catch (InvalidArgumentException $expected) {
+            $this->assertEquals('CustomerService was not set', $expected->getMessage());
+            return;
+        }
+
+        $this->fail('An expected exception has not been raised.');
+    }
+
+    public function testServiceGetterWhenServiceWasSet()
+    {
+        $mockCustomerService = $this->getMock('Customer\Service\CustomerService');
+
+        $controller = new IndexController();
+        $controller->setCustomerService($mockCustomerService);
+
+        $this->assertEquals($mockCustomerService, $controller->getCustomerService());
+    }
+
     /**
-     * Test if index action can be accessed
+     * Test index action view model
      */
-    public function testIndexActionCanBeAccessed()
+    public function testIndexAction()
     {
         return;
-        
+
         $data = array(
             array(
                 'id'        => 42,
@@ -67,6 +91,15 @@ class CustomerControllerViewModelTest extends PHPUnit_Framework_TestCase
 
         $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
         $mockCustomerService->expects($this->any())->method('fetchList')->will($this->returnValue($expectedListData));
+
+        $controller->setCustomerService();
+
+        $result = $controller->indexAction();
+
+        \Zend\Debug\Debug::dump($result);
+
+
+
 
         $serviceManager = $this->getApplicationServiceLocator();
         $serviceManager->setAllowOverride(true);

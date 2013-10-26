@@ -15,18 +15,16 @@
  */
 namespace CustomerTest\Controller;
 
-use Customer\Entity\CustomerEntity;
-use Customer\Hydrator\CustomerHydrator;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
- * ModuleTest
+ * CustomerControllerRoutingTest
  *
- * Tests the Module class of the Customer Module
+ * Tests the routing for the customer controller
  *
  * @package    CustomerTest
  */
-class CustomerControllerTest extends AbstractHttpControllerTestCase
+class CustomerControllerRoutingTest extends AbstractHttpControllerTestCase
 {
     /**
      * Setup test case
