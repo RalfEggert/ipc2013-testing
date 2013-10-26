@@ -79,8 +79,18 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         return $this->createXmlDataSet(__DIR__ . '/customer-test-data.xml');
     }
 
-    public function testFetchListOrderedByCountry()
+    public function testInsertCustomerValidData()
     {
+        $data = array(
+            'id'        => 99,
+            'firstname' => 'Horst',
+            'lastname'  => 'Hrubesch',
+            'street'    => 'Am Köpfen 124',
+            'postcode'  => '21451',
+            'city'      => 'Hamburg',
+            'country'   => 'de',
+        );
+
         $customerFilter = new CustomerInputFilter();
         $customerTable  = new CustomerTable($this->adapter);
 
@@ -88,21 +98,14 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
         $customerService->setCustomerFilter($customerFilter);
         $customerService->setCustomerTable($customerTable);
 
-        $customerList = $customerService->fetchList();
+        $customerEntity = $customerService->save($data);
 
         $queryTable = $this->getConnection()->createQueryTable(
-            'loadCustomersOrderedByLastname', 'SELECT * FROM customers ORDER BY lastname;'
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "' . $data['id'] . '";'
         );
 
-        $this->assertEquals($queryTable->getRowCount(), count($customerList));
-
-        $hydrator = new CustomerHydrator();
-
-        foreach ($customerList as $key => $customerEntity) {
-            $expectedRow = $queryTable->getRow($key);
-            $customerRow = $hydrator->extract($customerEntity);
-
-            $this->assertEquals($expectedRow, $customerRow);
-        }
+        $expectedRow = $queryTable->getRow(0);
+        
+        $this->assertEquals($expectedRow, $customerRow);
     }
 }
