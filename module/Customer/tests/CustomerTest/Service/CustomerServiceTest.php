@@ -15,6 +15,7 @@
  */
 namespace CustomerTest\Service;
 
+use Customer\InputFilter\CustomerInputFilter;
 use Customer\Service\CustomerService;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
@@ -79,11 +80,11 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 
     public function testFilterGetterWhenFilterWasSet()
     {
-        $mockCustomerFilter = $this->getMock('Customer\Filter\CustomerFilter');
+        $customerFilter = new CustomerInputFilter();
 
         $customerService = new CustomerService();
-        $customerService->setCustomerFilter($mockCustomerFilter);
+        $customerService->setCustomerFilter($customerFilter);
 
-        $this->assertEquals($mockCustomerFilter, $customerService->getCustomerFilter());
+        $this->assertEquals($customerFilter, $customerService->getCustomerFilter());
     }
 }
