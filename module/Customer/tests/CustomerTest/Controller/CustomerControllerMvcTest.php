@@ -116,4 +116,25 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
             $this->assertContains($customerEntity->getCountry(), $this->getResponse()->getContent());
         }
     }
+
+    /**
+     * Test if show action can be accessed
+     */
+    public function testShowActionCanBeAccessed()
+    {
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchSingleById')->will($this->returnValue(new CustomerEntity()));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/show/1');
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('Customer');
+        $this->assertControllerName('customer');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('customer/action');
+    }
 }
