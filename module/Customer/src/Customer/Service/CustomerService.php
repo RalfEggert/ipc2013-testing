@@ -127,8 +127,11 @@ class CustomerService
      */
     public function save(array $data, $id = null)
     {
-        // setup entity
-        $customerEntity = new CustomerEntity();
+        // get mode
+        $mode = (!$id) ? 'insert' : 'update';
+
+        // get customer
+        $customerEntity = ($mode == 'insert') ? new CustomerEntity() : $this->fetchSingleById($id);
 
         // get filter and set data
         $filter = $this->getCustomerFilter();
@@ -145,10 +148,14 @@ class CustomerService
 
         // insert new customer
         try {
-            $this->getCustomerTable()->insertCustomer($customerEntity);
+            if ($mode == 'insert') {
+                $this->getCustomerTable()->insertCustomer($customerEntity);
 
-            // get last insert value
-            $id = $this->getCustomerTable()->getLastInsertValue();
+                // get last insert value
+                $id = $this->getCustomerTable()->getLastInsertValue();
+            } else {
+                $this->getCustomerTable()->updateCustomer($customerEntity);
+            }
         } catch (InvalidQueryException $e) {
             return false;
         }
