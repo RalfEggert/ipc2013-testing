@@ -16,6 +16,7 @@
 namespace Customer\Service;
 
 use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use Customer\InputFilter\CustomerInputFilter;
 use Customer\Table\CustomerTable;
 use InvalidArgumentException;
@@ -115,4 +116,33 @@ class CustomerService
         return $this->getCustomerTable()->fetchSingleById($id);
     }
 
+    /**
+     * Save a customer
+     *
+     * @param array $data input data
+     * @param integer $id id of customer entry
+     *
+     * @return CustomerEntity|false
+     */
+    public function save(array $data, $id = null)
+    {
+        // setup entity
+        $customerEntity = new CustomerEntity();
+
+        // get filter and set data
+        $filter = $this->getCustomerFilter();
+        $filter->setData($data);
+
+        // check for invalid data
+        if (!$filter->isValid()) {
+            return false;
+        }
+
+        /** @var CustomerHydrator $hydrator */
+        $hydrator = new CustomerHydrator();
+        $hydrator->hydrate($data, $customerEntity);
+
+        // return entity
+        return $customerEntity;
+    }
 }
