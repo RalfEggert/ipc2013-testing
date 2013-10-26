@@ -232,4 +232,48 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $this->assertRedirectTo('/customer/update/42');
     }
 
+
+    /**
+     * Test if create action works as expected with invalid data
+     */
+    public function testCreateActionWithInvalidPostData()
+    {
+        $postData = array(
+            'id'        => 'a',
+            'firstname' => 'Manfred 0815',
+            'lastname'  => '#(9(au',
+            'street'    => '',
+            'postcode'  => '64654564564646464654654654',
+            'city'      => 'M',
+            'country'   => 'it',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($postData, $expectedEntity);
+
+        $customerFilter = new CustomerInputFilter();
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue($expectedEntity));
+        $mockCustomerService->expects($this->any())->method('getCustomerFilter')->will($this->returnValue($customerFilter));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/create', 'POST', $postData);
+
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('Customer');
+        $this->assertControllerName('customer');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('customer/action');
+
+        $this->assertContains('<form action="/customer/create"', $this->getResponse()->getContent());
+
+        \Zend\Debug\Debug::dump($customerFilter);
+    }
 }
