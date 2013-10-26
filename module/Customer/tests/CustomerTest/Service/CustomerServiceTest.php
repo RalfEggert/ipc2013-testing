@@ -242,7 +242,7 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
     {
         $customerService = new CustomerService();
 
-        $result = $customerService->delete();
+        $result = $customerService->delete(42);
 
         $this->assertInternalType('boolean', $result);
     }

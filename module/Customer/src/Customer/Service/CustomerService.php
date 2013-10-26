@@ -145,4 +145,15 @@ class CustomerService
         // return entity
         return $customerEntity;
     }
+
+    /**
+     * Delete existing customer
+     *
+     * @param integer $id customer id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        return true;
+    }
 }
