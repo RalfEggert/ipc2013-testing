@@ -89,13 +89,84 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($customerFilter, $customerService->getCustomerFilter());
     }
 
+    public function testFetchListResult()
+    {
+        $data = array(
+            42 => array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            ),
+            43 => array(
+                'id'        => 43,
+                'firstname' => 'Manuela',
+                'lastname'  => 'Musterfrau',
+                'street'    => 'Am Mustern 987',
+                'postcode'  => '98765',
+                'city'      => 'Testhausen',
+                'country'   => 'de',
+            )
+        );
+
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
+
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', null, array($mockDbAdapter));
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerTable($mockCustomerTable);
+
+        $customerList = $customerService->fetchList();
+
+        $this->assertInternalType('array', $customerList);
+
+        foreach ($customerList as $key => $customerEntity) {
+            $this->assertTrue($customerEntity instanceof CustomerEntity);
+
+            $this->assertSame($data[$key]['id'], $customerEntity->getId());
+            $this->assertSame($data[$key]['firstname'], $customerEntity->getFirstname());
+            $this->assertSame($data[$key]['lastname'], $customerEntity->getLastname());
+            $this->assertSame($data[$key]['street'], $customerEntity->getStreet());
+            $this->assertSame($data[$key]['postcode'], $customerEntity->getPostcode());
+            $this->assertSame($data[$key]['city'], $customerEntity->getCity());
+            $this->assertSame($data[$key]['country'], $customerEntity->getCountry());
+        }
+    }
+
     public function testFetchSingleById()
     {
-        $mockDbDriver      = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
-        $mockDbAdapter     = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+        $data = array(
+            array(
+                'id'        => 42,
+                'firstname' => 'Manfred',
+                'lastname'  => 'Mustermann',
+                'street'    => 'Am Testen 123',
+                'postcode'  => '54321',
+                'city'      => 'Musterhausen',
+                'country'   => 'de',
+            )
+        );
+
+        $mockDbStatement = $this->getMock('Zend\Db\Adapter\Driver\StatementInterface');
+        $mockDbStatement->expects($this->any())->method('execute')->will($this->returnValue($data));
+
+        $mockDbDriver = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbDriver->expects($this->any())->method('createStatement')->will($this->returnValue($mockDbStatement));
+
+        $mockDbAdapter = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+
         $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', null, array($mockDbAdapter));
         $mockCustomerTable->expects($this->any())->method('fetchSingleById')->will($this->returnValue(new CustomerEntity()));
-        
+
         $customerService = new CustomerService();
         $customerService->setCustomerTable($mockCustomerTable);
 
@@ -103,5 +174,12 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($customerEntity instanceof CustomerEntity);
 
+        $this->assertSame($data[0]['id'], $customerEntity->getId());
+        $this->assertSame($data[0]['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data[0]['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data[0]['street'], $customerEntity->getStreet());
+        $this->assertSame($data[0]['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data[0]['city'], $customerEntity->getCity());
+        $this->assertSame($data[0]['country'], $customerEntity->getCountry());
     }
 }

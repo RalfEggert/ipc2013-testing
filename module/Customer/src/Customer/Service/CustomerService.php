@@ -15,6 +15,7 @@
  */
 namespace Customer\Service;
 
+use Customer\Entity\CustomerEntity;
 use Customer\InputFilter\CustomerInputFilter;
 use Customer\Table\CustomerTable;
 use InvalidArgumentException;
@@ -85,4 +86,33 @@ class CustomerService
         }
         return $this->customerFilter;
     }
+
+    /**
+     * Fetch list of customers
+     *
+     * @param integer $country country code
+     * @return array
+     */
+    public function fetchList($country = null)
+    {
+        $result = array();
+
+        foreach ($this->getCustomerTable()->fetchList($country) as $customerEntity) {
+            $result[$customerEntity->getId()] = $customerEntity;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Fetch single by id
+     *
+     * @param varchar $id
+     * @return CustomerEntity
+     */
+    public function fetchSingleById($id)
+    {
+        return $this->getCustomerTable()->fetchSingleById($id);
+    }
+
 }
