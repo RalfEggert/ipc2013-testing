@@ -140,4 +140,24 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals($expectedRow, $customerRow);
     }
+
+    public function testDeleteExistingCustomer()
+    {
+        $customerFilter = new CustomerInputFilter();
+        $customerTable = new CustomerTable($this->adapter);
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerFilter($customerFilter);
+        $customerService->setCustomerTable($customerTable);
+
+        $customerEntity = $customerService->fetchSingleById(42);
+
+        $customerTable->deleteCustomer($customerEntity);
+
+        $queryTable = $this->getConnection()->createQueryTable(
+            'loadCustomersOrderedByLastname', 'SELECT * FROM customers WHERE id = "42";'
+        );
+
+        $this->assertEquals(0, $queryTable->getRowCount());
+    }
 }
