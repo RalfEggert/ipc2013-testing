@@ -63,4 +63,27 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($mockCustomerTable, $customerService->getCustomerTable());
     }
+
+    public function testFilterGetterWhenFilterNotSet()
+    {
+        try {
+            $customerService = new CustomerService();
+            $customerFilter   = $customerService->getCustomerFilter();
+        } catch (InvalidArgumentException $expected) {
+            $this->assertEquals('CustomerFilter was not set', $expected->getMessage());
+            return;
+        }
+
+        $this->fail('An expected exception has not been raised.');
+    }
+
+    public function testFilterGetterWhenFilterWasSet()
+    {
+        $mockCustomerFilter = $this->getMock('Customer\Filter\CustomerFilter');
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerFilter($mockCustomerFilter);
+
+        $this->assertEquals($mockCustomerFilter, $customerService->getCustomerFilter());
+    }
 }
