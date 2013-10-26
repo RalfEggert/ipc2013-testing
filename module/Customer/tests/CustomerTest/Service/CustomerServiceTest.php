@@ -28,11 +28,14 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
 {
     public function testServiceFileExistsAndIsInstantiable()
     {
+        $mockCustomerTable  = $this->getMock('Customer\Table\CustomerTable');
+        $mockCustomerFilter = $this->getMock('Customer\InputFilter\CustomerInputFilter');
+
         $className = 'Customer\Service\CustomerService';
 
         $this->assertTrue(class_exists($className));
 
-        $customerService = new $className();
+        $customerService = new $className($mockCustomerTable, $mockCustomerFilter);
 
         $this->assertInstanceOf($className, $customerService);
     }
