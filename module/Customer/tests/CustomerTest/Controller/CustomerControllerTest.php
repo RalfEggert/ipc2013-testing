@@ -15,6 +15,8 @@
  */
 namespace CustomerTest\Controller;
 
+use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
 /**
