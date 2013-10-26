@@ -16,6 +16,8 @@
 namespace CustomerTest\Controller;
 
 use Customer\Controller\IndexController;
+use Customer\Entity\CustomerEntity;
+use Customer\Hydrator\CustomerHydrator;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
@@ -45,10 +47,10 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
     {
         $mockCustomerService = $this->getMock('Customer\Service\CustomerService');
 
-        $controller = new IndexController();
-        $controller->setCustomerService($mockCustomerService);
+        $customerController = new IndexController();
+        $customerController->setCustomerService($mockCustomerService);
 
-        $this->assertEquals($mockCustomerService, $controller->getCustomerService());
+        $this->assertEquals($mockCustomerService, $customerController->getCustomerService());
     }
 
     public function testFormGetterWhenFormNotSet()
@@ -68,10 +70,10 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
     {
         $mockCustomerForm = $this->getMock('Customer\Form\CustomerForm');
 
-        $controller = new IndexController();
-        $controller->setCustomerForm($mockCustomerForm);
+        $customerController = new IndexController();
+        $customerController->setCustomerForm($mockCustomerForm);
 
-        $this->assertEquals($mockCustomerForm, $controller->getCustomerForm());
+        $this->assertEquals($mockCustomerForm, $customerController->getCustomerForm());
     }
 
     /**
@@ -79,8 +81,6 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
      */
     public function testIndexAction()
     {
-        return;
-
         $data = array(
             array(
                 'id'        => 42,
@@ -116,35 +116,22 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
         $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
         $mockCustomerService->expects($this->any())->method('fetchList')->will($this->returnValue($expectedListData));
 
-        $controller->setCustomerService();
+        $customerController = new IndexController();
+        $customerController->setCustomerService($mockCustomerService);
 
-        $result = $controller->indexAction();
+        $viewModel = $customerController->indexAction();
 
-        \Zend\Debug\Debug::dump($result);
+        $customerList = $viewModel->getVariable('customerList');
 
-
-
-
-        $serviceManager = $this->getApplicationServiceLocator();
-        $serviceManager->setAllowOverride(true);
-        $serviceManager->setService('Customer\Service\CustomerService', $mockCustomerService);
-
-        $result = $this->dispatch('/customer');
-        $this->assertResponseStatusCode(200);
-
-        $this->assertModuleName('Customer');
-        $this->assertControllerName('customer');
-        $this->assertControllerClass('IndexController');
-        $this->assertMatchedRouteName('customer');
-
-        foreach ($expectedListData as $customerEntity) {
+        foreach ($expectedListData as $key => $customerEntity) {
             /** @var $customerEntity CustomerEntity */
-            $this->assertContains($customerEntity->getFirstname(), $this->getResponse());
-            $this->assertContains($customerEntity->getLastname(), $this->getResponse());
-            $this->assertContains($customerEntity->getStreet(), $this->getResponse());
-            $this->assertContains($customerEntity->getPostcode(), $this->getResponse());
-            $this->assertContains($customerEntity->getCity(), $this->getResponse());
-            $this->assertContains($customerEntity->getCountry(), $this->getResponse());
+            $this->assertEquals($customerEntity->getId(), $customerList[$key]->getId());
+            $this->assertEquals($customerEntity->getFirstname(), $customerList[$key]->getFirstname());
+            $this->assertEquals($customerEntity->getLastname(), $customerList[$key]->getLastname());
+            $this->assertEquals($customerEntity->getStreet(), $customerList[$key]->getStreet());
+            $this->assertEquals($customerEntity->getPostcode(), $customerList[$key]->getPostcode());
+            $this->assertEquals($customerEntity->getCity(), $customerList[$key]->getCity());
+            $this->assertEquals($customerEntity->getCountry(), $customerList[$key]->getCountry());
         }
     }
 }
