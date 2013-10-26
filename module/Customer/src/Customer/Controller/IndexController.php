@@ -15,6 +15,8 @@
  */
 namespace Customer\Controller;
 
+use Customer\Service\CustomerService;
+use InvalidArgumentException;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -27,6 +29,36 @@ use Zend\View\Model\ViewModel;
  */
 class IndexController extends AbstractActionController
 {
+    /**
+     * @var CustomerService
+     */
+    protected $customerService;
+
+    /**
+     * set the customer service
+     *
+     * @param CustomerService
+     */
+    public function setCustomerService(CustomerService $customerService)
+    {
+        $this->customerService = $customerService;
+
+        return $this;
+    }
+
+    /**
+     * Get the customer service
+     *
+     * @return CustomerService
+     */
+    public function getCustomerService()
+    {
+        if (!isset($this->customerService)) {
+            throw new InvalidArgumentException('CustomerService was not set');
+        }
+        return $this->customerService;
+    }
+
     /**
      * Handle customer list
      */
