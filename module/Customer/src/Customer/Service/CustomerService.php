@@ -15,6 +15,8 @@
  */
 namespace Customer\Service;
 
+use Customer\InputFilter\CustomerInputFilter;
+use Customer\Table\CustomerTable;
 use InvalidArgumentException;
 
 /**
@@ -26,18 +28,61 @@ use InvalidArgumentException;
  */
 class CustomerService
 {
+    /**
+     * @var CustomerTable
+     */
     protected $customerTable;
 
-    public function setCustomerTable($customerTable)
+    /**
+     * @var CustomerInputFilter
+     */
+    protected $customerFilter;
+
+    /**
+     * Set Customer Table
+     *
+     * @param CustomerTable $customerTable
+     */
+    public function setCustomerTable(CustomerTable $customerTable)
     {
         $this->customerTable = $customerTable;
     }
 
+    /**
+     * Get Customer Table
+     *
+     * @return CustomerTable
+     * @throws \InvalidArgumentException
+     */
     public function getCustomerTable()
     {
         if (!isset($this->customerTable)) {
             throw new InvalidArgumentException('CustomerTable was not set');
         }
         return $this->customerTable;
+    }
+
+    /**
+     * Set Customer Filter
+     *
+     * @param CustomerInputFilter $customerFilter
+     */
+    public function setCustomerFilter(CustomerInputFilter $customerFilter)
+    {
+        $this->customerFilter = $customerFilter;
+    }
+
+    /**
+     * Get Customer Filter
+     *
+     * @return CustomerInputFilter
+     * @throws \InvalidArgumentException
+     */
+    public function getCustomerFilter()
+    {
+        if (!isset($this->customerFilter)) {
+            throw new InvalidArgumentException('CustomerFilter was not set');
+        }
+        return $this->customerFilter;
     }
 }
