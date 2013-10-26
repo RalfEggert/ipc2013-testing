@@ -175,4 +175,19 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $this->assertContains($expectedEntity->getCity(), $this->getResponse()->getContent());
         $this->assertContains($expectedEntity->getCountry(), $this->getResponse()->getContent());
     }
+
+    /**
+     * Test if create action can be accessed
+     */
+    public function testCreateActionCanBeAccessed()
+    {
+        $this->dispatch('/customer/create');
+        $this->assertResponseStatusCode(200);
+
+        $this->assertModuleName('Customer');
+        $this->assertControllerName('customer');
+        $this->assertControllerClass('IndexController');
+        $this->assertMatchedRouteName('customer/action');
+    }
+
 }
