@@ -15,6 +15,8 @@
  */
 namespace Customer\Service;
 
+use InvalidArgumentException;
+
 /**
  * Customer sercice
  *
@@ -24,4 +26,18 @@ namespace Customer\Service;
  */
 class CustomerService
 {
+    protected $customerTable;
+
+    public function setCustomerTable($customerTable)
+    {
+        $this->customerTable = $customerTable;
+    }
+
+    public function getCustomerTable()
+    {
+        if (!isset($this->customerTable)) {
+            throw new InvalidArgumentException('CustomerTable was not set');
+        }
+        return $this->customerTable;
+    }
 }
