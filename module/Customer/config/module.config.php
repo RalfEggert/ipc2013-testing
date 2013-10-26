@@ -63,6 +63,12 @@ return array(
         ),
     ),
 
+    'input_filters' => array(
+        'invokables' => array(
+            'Customer\CustomerFilter'   => 'Customer\InputFilter\CustomerInputFilter',
+        ),
+    ),
+
     'view_manager'    => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',

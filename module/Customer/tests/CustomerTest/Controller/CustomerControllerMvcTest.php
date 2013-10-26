@@ -240,10 +240,9 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
     public function testCreateActionWithInvalidPostData()
     {
         $postData = array(
-            'id'        => 'a',
             'firstname' => 'Manfred 0815',
             'lastname'  => '#(9(au',
-            'street'    => '',
+            'street'    => '##',
             'postcode'  => '64654564564646464654654654',
             'city'      => 'M',
             'country'   => 'it',
@@ -255,10 +254,14 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $customerHydrator->hydrate($postData, $expectedEntity);
 
         $customerFilter = new CustomerInputFilter();
+        $customerFilter->init();
+        $customerFilter->remove('id');
+        $customerFilter->setData($postData);
+        $customerFilter->isValid();
 
         $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
-        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue($expectedEntity));
         $mockCustomerService->expects($this->any())->method('getCustomerFilter')->will($this->returnValue($customerFilter));
+        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue(false));
 
         $serviceManager = $this->getApplicationServiceLocator();
         $serviceManager->setAllowOverride(true);
@@ -275,6 +278,14 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
 
         $this->assertContains('<form action="/customer/create"', $this->getResponse()->getContent());
 
-        \Zend\Debug\Debug::dump($customerFilter);
+        foreach ($postData as $value) {
+            $this->assertContains($value, $this->getResponse()->getContent());
+        }
+
+        foreach ($customerFilter->getMessages() as $messageBlock) {
+            foreach ($messageBlock as $message) {
+                $this->assertContains($message, $this->getResponse()->getContent());
+            }
+        }
     }
 }

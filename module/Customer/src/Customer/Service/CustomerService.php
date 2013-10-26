@@ -135,6 +135,11 @@ class CustomerService
 
         // get filter and set data
         $filter = $this->getCustomerFilter();
+
+        if ($mode == 'insert') {
+            $filter->remove('id');
+        }
+
         $filter->setData($data);
 
         // check for invalid data

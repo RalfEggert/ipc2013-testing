@@ -129,6 +129,8 @@ class IndexController extends AbstractActionController
      */
     public function createAction()
     {
+        $customerForm = $this->getCustomerForm();
+
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -137,9 +139,10 @@ class IndexController extends AbstractActionController
             if ($customerEntity) {
                 return $this->redirect()->toRoute('customer/action', array('action' => 'update', 'id' => $customerEntity->getId()));
             }
-        }
 
-        $customerForm = $this->getCustomerForm();
+            $customerForm->setMessages($this->getCustomerService()->getCustomerFilter()->getMessages());
+            $customerForm->setData($this->getCustomerService()->getCustomerFilter()->getValues());
+        }
 
         return new ViewModel(
             array(
