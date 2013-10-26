@@ -186,4 +186,34 @@ class IndexController extends AbstractActionController
             )
         );
     }
+
+    /**
+     * Handle customer delete page
+     */
+    public function deleteAction()
+    {
+        // read id from route
+        $id = (int) $this->params()->fromRoute('id');
+
+        // check for no id
+        if (!$id) {
+            // Redirect to customer page
+            return $this->redirect()->toRoute('customer');
+        }
+
+        // read customer entity
+        $customer = $this->getCustomerService()->fetchSingleById($id);
+
+        // check for customer entity
+        if (!$customer) {
+            // Redirect to customer page
+            return $this->redirect()->toRoute('customer');
+        }
+
+        // delete with redirected data
+        $customer = $this->getCustomerService()->delete($id);
+
+        // Redirect to customer page
+        return $this->redirect()->toRoute('customer');
+    }
 }
