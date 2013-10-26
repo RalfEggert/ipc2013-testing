@@ -198,4 +198,38 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $this->assertContains('<form action="/customer/create"', $this->getResponse()->getContent());
     }
 
+    /**
+     * Test if show action view result is as expected
+     */
+    public function testCreateActionWithValidPostData()
+    {
+        $postData = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($postData, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue($expectedEntity));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/create', 'POST', $postData);
+
+        $this->assertResponseStatusCode(302);
+
+        $this->assertRedirectTo('/customer/update/42');
+    }
+
 }
