@@ -17,12 +17,14 @@ namespace CustomerTest\Controller;
 
 use Customer\Controller\IndexController;
 use Customer\Entity\CustomerEntity;
+use Customer\Form\CustomerForm;
 use Customer\Hydrator\CustomerHydrator;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
-use Zend\Http\Request;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
+use Zend\Stdlib\Parameters;
 
 /**
  * CustomerControllerViewModelTest
@@ -186,45 +188,17 @@ class CustomerControllerApiTest extends PHPUnit_Framework_TestCase
     /**
      * Test create action view model
      */
-    public function testCreateAction()
+    public function testCreateActionWithoutPost()
     {
-        $data = array(
-            'id'        => 42,
-            'firstname' => 'Manfred',
-            'lastname'  => 'Mustermann',
-            'street'    => 'Am Testen 123',
-            'postcode'  => '54321',
-            'city'      => 'Musterhausen',
-            'country'   => 'de',
-        );
-
-        $expectedEntity = new CustomerEntity();
-
-        $customerHydrator = new CustomerHydrator();
-        $customerHydrator->hydrate($data, $expectedEntity);
-
-        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
-        $mockCustomerService->expects($this->any())->method('save')->will($this->returnValue($expectedEntity));
-
-        $request = new Request();
-
-        $mvcEvent = new MvcEvent();
-        $mvcEvent->setRequest($request);
+        $mockCustomerForm = $this->getMockBuilder('Customer\Form\CustomerForm')->getMock();
 
         $customerController = new IndexController();
-        $customerController->setCustomerService($mockCustomerService);
-        $customerController->setEvent($mvcEvent);
+        $customerController->setCustomerForm($mockCustomerForm);
 
         $viewModel = $customerController->createAction();
 
-        $customerEntity = $viewModel->getVariable('customerEntity');
+        $customerForm = $viewModel->getVariable('customerForm');
 
-        $this->assertEquals($expectedEntity->getId(), $customerEntity->getId());
-        $this->assertEquals($expectedEntity->getFirstname(), $customerEntity->getFirstname());
-        $this->assertEquals($expectedEntity->getLastname(), $customerEntity->getLastname());
-        $this->assertEquals($expectedEntity->getStreet(), $customerEntity->getStreet());
-        $this->assertEquals($expectedEntity->getPostcode(), $customerEntity->getPostcode());
-        $this->assertEquals($expectedEntity->getCity(), $customerEntity->getCity());
-        $this->assertEquals($expectedEntity->getCountry(), $customerEntity->getCountry());
+        $this->assertTrue($customerForm instanceof CustomerForm);
     }
 }
