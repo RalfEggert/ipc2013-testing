@@ -137,4 +137,42 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
         $this->assertControllerClass('IndexController');
         $this->assertMatchedRouteName('customer/action');
     }
+
+    /**
+     * Test if show action view result is as expected
+     */
+    public function testShowActionViewResultAsExpected()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $expectedEntity = new CustomerEntity();
+
+        $customerHydrator = new CustomerHydrator();
+        $customerHydrator->hydrate($data, $expectedEntity);
+
+        $mockCustomerService = $this->getMockBuilder('Customer\Service\CustomerService')->getMock();
+        $mockCustomerService->expects($this->any())->method('fetchSingleById')->will($this->returnValue($expectedEntity));
+
+        $serviceManager = $this->getApplicationServiceLocator();
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->setService('Customer\Service\Customer', $mockCustomerService);
+
+        $this->dispatch('/customer/show/42');
+
+        $this->assertContains((string) $expectedEntity->getId(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getFirstname(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getLastname(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getStreet(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getPostcode(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getCity(), $this->getResponse()->getContent());
+        $this->assertContains($expectedEntity->getCountry(), $this->getResponse()->getContent());
+    }
 }
