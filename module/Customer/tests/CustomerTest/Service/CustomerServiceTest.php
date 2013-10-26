@@ -182,4 +182,67 @@ class CustomerServiceTest extends PHPUnit_Framework_TestCase
         $this->assertSame($data[0]['city'], $customerEntity->getCity());
         $this->assertSame($data[0]['country'], $customerEntity->getCountry());
     }
+
+    public function testSaveValidData()
+    {
+        $data = array(
+            'id'        => 42,
+            'firstname' => 'Manfred',
+            'lastname'  => 'Mustermann',
+            'street'    => 'Am Testen 123',
+            'postcode'  => '54321',
+            'city'      => 'Musterhausen',
+            'country'   => 'de',
+        );
+
+        $mockDbDriver      = $this->getMock('Zend\Db\Adapter\Driver\DriverInterface');
+        $mockDbAdapter     = $this->getMock('Zend\Db\Adapter\Adapter', null, array($mockDbDriver));
+        $mockCustomerTable = $this->getMock('Customer\Table\CustomerTable', null, array($mockDbAdapter));
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerTable($mockCustomerTable);
+
+        $customerEntity = $customerService->save($data);
+
+        $this->assertTrue($customerEntity instanceof CustomerEntity);
+
+        $this->assertSame($data[0]['id'], $customerEntity->getId());
+        $this->assertSame($data[0]['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data[0]['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data[0]['street'], $customerEntity->getStreet());
+        $this->assertSame($data[0]['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data[0]['city'], $customerEntity->getCity());
+        $this->assertSame($data[0]['country'], $customerEntity->getCountry());
+    }
+
+    public function testSaveInvalidData()
+    {
+        $data = array(
+            'id'        => 'a',
+            'firstname' => 'Manfred 0815',
+            'lastname'  => '#(9(au',
+            'street'    => '',
+            'postcode'  => '64654564564646464654654654',
+            'city'      => 'M',
+            'country'   => 'it',
+        );
+
+        $mockCustomerFilter = $this->getMock('Customer\InputFilter\CustomerInputFilter');
+        $mockCustomerFilter->init();
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerFilter($mockCustomerFilter);
+
+        $customerEntity = $customerService->save($data);
+
+        $this->assertFalse($customerEntity);
+
+        $this->assertSame($data[0]['id'], $customerEntity->getId());
+        $this->assertSame($data[0]['firstname'], $customerEntity->getFirstname());
+        $this->assertSame($data[0]['lastname'], $customerEntity->getLastname());
+        $this->assertSame($data[0]['street'], $customerEntity->getStreet());
+        $this->assertSame($data[0]['postcode'], $customerEntity->getPostcode());
+        $this->assertSame($data[0]['city'], $customerEntity->getCity());
+        $this->assertSame($data[0]['country'], $customerEntity->getCountry());
+    }
 }
