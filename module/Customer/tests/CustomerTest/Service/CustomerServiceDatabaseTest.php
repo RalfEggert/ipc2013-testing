@@ -158,4 +158,18 @@ class CustomerServiceDatabaseTest extends PHPUnit_Extensions_Database_TestCase
 
         $this->assertEquals(0, $queryTable->getRowCount());
     }
+
+    public function testDeleteNotExistingCustomer()
+    {
+        $customerFilter = new CustomerInputFilter();
+        $customerTable = new CustomerTable($this->adapter);
+
+        $customerService = new CustomerService();
+        $customerService->setCustomerFilter($customerFilter);
+        $customerService->setCustomerTable($customerTable);
+
+        $result = $customerService->delete('99');
+
+        $this->assertFalse($result);
+    }
 }
