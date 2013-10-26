@@ -42,7 +42,7 @@ use Customer\Entity\CustomerEntity;
             <td><?php echo $customerEntity->getLastname(); ?></td>
             <td><?php echo $customerEntity->getStreet() . ', ' . $customerEntity->getPostcode() . ' ' . $customerEntity->getCity(); ?></td>
             <td><?php echo $customerEntity->getCountry(); ?></td>
-            <td>
+            <td style="text-align: right;">
                 <a href="<?php echo $this->url('customer/action', array('action' => 'show', 'id' => $customerEntity->getId()));?>" class="btn btn-small"><i class="icon-search"></i> anzeigen</a>
                 <a href="<?php echo $this->url('customer/action', array('action' => 'update', 'id' => $customerEntity->getId()));?>" class="btn btn-small"><i class="icon-pencil"></i> bearbeiten</a>
                 <a href="<?php echo $this->url('customer/action', array('action' => 'delete', 'id' => $customerEntity->getId()));?>" class="btn btn-small" onClick="return confirm('Sind Sie sicher?')"><i class="icon-trash"></i> löschen</a>
