@@ -16,6 +16,7 @@
 namespace Customer\Controller;
 
 use Customer\Form\CustomerForm;
+use Customer\Hydrator\CustomerHydrator;
 use Customer\Service\CustomerService;
 use InvalidArgumentException;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -156,7 +157,28 @@ class IndexController extends AbstractActionController
      */
     public function updateAction()
     {
+        $id = $this->params()->fromRoute('id');
+
         $customerForm = $this->getCustomerForm();
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $customerEntity = $this->getCustomerService()->save($request->getPost()->toArray(), $id);
+
+            if ($customerEntity) {
+                return $this->redirect()->toRoute('customer/action', array('action' => 'update', 'id' => $customerEntity->getId()));
+            }
+
+            $customerForm->setMessages($this->getCustomerService()->getCustomerFilter()->getMessages());
+            $customerForm->setData($this->getCustomerService()->getCustomerFilter()->getValues());
+        } else {
+            $customerEntity = $this->getCustomerService()->fetchSingleById($id);
+
+            $customerHydrator = new CustomerHydrator();
+
+            $customerForm->setData($customerHydrator->extract($customerEntity));
+        }
 
         return new ViewModel(
             array(
