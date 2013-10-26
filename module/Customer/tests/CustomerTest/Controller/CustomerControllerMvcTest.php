@@ -108,7 +108,7 @@ class CustomerControllerMvcTest extends AbstractHttpControllerTestCase
 
         foreach ($expectedListData as $customerEntity) {
             /** @var $customerEntity CustomerEntity */
-            $this->assertContains($customerEntity->getId(), $this->getResponse()->getContent());
+            $this->assertContains((string) $customerEntity->getId(), $this->getResponse()->getContent());
             $this->assertContains($customerEntity->getFirstname(), $this->getResponse()->getContent());
             $this->assertContains($customerEntity->getLastname(), $this->getResponse()->getContent());
             $this->assertContains($customerEntity->getStreet(), $this->getResponse()->getContent());
